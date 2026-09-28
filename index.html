@@ -294,6 +294,37 @@ body:not(.locked) #gate{display:none}
 .mvx-signout{color:inherit; opacity:.75; text-decoration:underline; text-underline-offset:2px}
 .mvx-signout:hover{opacity:1}
 
+/* ---------- phone fit ---------- */
+html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
+html, body{max-width:100%; overflow-x:hidden}
+@supports (overflow:clip){html, body{overflow-x:clip}}
+img, svg{max-width:100%}
+/* 16px stops iPhone Safari zooming in when the password box is tapped */
+.mvx-gate-input{font-size:16px}
+@media (max-width:640px){
+  .mvx-masthead h1{font-size:2.5rem}
+  .mvx-tagline{font-size:1rem}
+  .mvx-mastmeta span, .mvx-secnote{white-space:normal}
+  .mvx-seclabel{flex-wrap:wrap; row-gap:.3rem}
+  .mvx-statnum{font-size:2.1rem; white-space:normal}
+  .mvx-physname, .mvx-physinst{white-space:normal}
+  .mvx-scroll{overflow-x:visible}
+  table.mvx-spec{min-width:0; font-size:.84rem}
+  table.mvx-spec th{padding:.55rem .45rem; font-size:.66rem; letter-spacing:.03em; white-space:normal}
+  table.mvx-spec td{padding:.55rem .45rem}
+  /* POs table becomes one card per PO */
+  table.mvx-spec:has(#po-tbody) thead{display:none}
+  #po-tbody tr{display:grid; grid-template-columns:1fr auto; column-gap:.8rem; row-gap:.15rem; padding:.75rem .8rem; border-bottom:1px solid var(--border)}
+  #po-tbody td{display:block; padding:0; border:0; white-space:normal; text-align:left; min-width:0; overflow-wrap:anywhere}
+  #po-tbody td:nth-child(2){grid-column:1; grid-row:1}
+  #po-tbody td:nth-child(6){grid-column:2; grid-row:1; text-align:right; white-space:nowrap}
+  #po-tbody td:nth-child(1){grid-column:1; grid-row:2}
+  #po-tbody td:nth-child(3){grid-column:2; grid-row:2; text-align:right}
+  #po-tbody td:nth-child(4){grid-column:1; grid-row:3; font-size:.78rem}
+  #po-tbody td:nth-child(5){grid-column:2; grid-row:3; text-align:right; font-size:.78rem}
+  #po-tbody td:nth-child(5)::before{content:"PO "}
+}
+
 </style>
 </head>
 <body class="locked">
