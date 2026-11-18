@@ -725,7 +725,7 @@ img, svg{max-width:100%}
 <section class="mvx-band row-line">
   <div class="mvx-container">
     <h2 class="mvx-seclabel">Pro Quotes by Territory <span class="mvx-secnote" id="p-terr-secnote"></span></h2>
-    <p class="mvx-secdesc">Pro quotes logged plus Pro POs received per territory, with the rep of record.</p>
+    <p class="mvx-secdesc">Pro quotes logged plus Pro POs received per territory, with the rep of record. Click a territory to see physicians.</p>
     <div class="mvx-legend">
       <span class="mvx-legend-item"><span class="mvx-swatch" style="background:var(--accent)"></span>Quotes logged</span>
       <span class="mvx-legend-item"><span class="mvx-swatch" style="background:var(--mvx-narwhal-dot)"></span>POs received (count)</span>
@@ -1450,8 +1450,8 @@ var TARGETS = [];
   });
 
   
-  function territoryPanelHtml(t) {
-    var targets = computeCoverage().filter(function (x) { return x.territory === t; });
+  function territoryPanelHtml(t, allTargets) {
+    var targets = (allTargets || computeCoverage()).filter(function (x) { return x.territory === t; });
     var head = '<div class="mvx-panelhead">Target List</div>';
     if (!targets.length) {
       return '<div class="mvx-territorypanel">' + head + '<div class="mvx-tierpanel-empty">No target-list accounts mapped to ' +
@@ -1466,6 +1466,25 @@ var TARGETS = [];
     if (!body) body = '<div class="mvx-tierpanel-empty">No target-list accounts mapped to ' + esc(t) + '.</div>';
     return '<div class="mvx-territorypanel">' + head + body + "</div>";
   }
+
+  
+  function wireTerritoryBars(barsEl, getTargets) {
+    if (barsEl) barsEl.addEventListener("click", function (e) {
+      var row = e.target.closest ? e.target.closest(".mvx-bar-row") : null;
+      if (!row || !row.dataset || !row.dataset.territory) return;
+      var next = row.nextElementSibling;
+      var already = next && next.classList && next.classList.contains("mvx-territorypanel");
+      var openRows = barsEl.querySelectorAll(".mvx-bar-row.is-open");
+      for (var i = 0; i < openRows.length; i++) openRows[i].classList.remove("is-open");
+      var openPanels = barsEl.querySelectorAll(".mvx-territorypanel");
+      for (var j = 0; j < openPanels.length; j++) openPanels[j].parentNode.removeChild(openPanels[j]);
+      if (!already) {
+        row.insertAdjacentHTML("afterend", territoryPanelHtml(row.dataset.territory, getTargets()));
+        row.classList.add("is-open");
+      }
+    });
+  }
+  wireTerritoryBars($("p-terr-bars"), function () { return proTargets || computeProCoverage(null, null); });
 
   var terrBarsEl = $("terr-bars");
   if (terrBarsEl) terrBarsEl.addEventListener("click", function (e) {
@@ -1568,7 +1587,7 @@ var TARGETS = [];
       var t = x[0], rep = x[1], quotes = q.byTerritory[t] || 0, p = poByT[t] || 0, tot = quotes + p;
       if (!tot) return "";
       var qw = quotes / max * 100, pw = p / max * 100;
-      return '<div class="mvx-bar-row" style="cursor:default" title="' + esc(rep + " — " + t + " — " + pl(quotes, "quote") + (p ? " + " + pl(p, "PO") : "")) + '">' +
+      return '<div class="mvx-bar-row" data-territory="' + esc(t) + '" title="' + esc(rep + " — " + t + " — " + pl(quotes, "quote") + (p ? " + " + pl(p, "PO") : "")) + '">' +
         '<div><div class="mvx-bar-territory">' + esc(t) + '</div><div class="mvx-bar-rep">' + esc(rep) + "</div></div>" +
         '<div class="mvx-bar-track"><div class="mvx-bar-fill" style="width:' + qw.toFixed(2) + "%" + (p ? "; border-radius:4px 0 0 4px" : "") + '"></div>' +
         (p ? '<div class="mvx-bar-po" style="left:' + qw.toFixed(2) + "%; width:" + pw.toFixed(2) + '%"></div>' : "") + "</div>" +
@@ -1625,10 +1644,11 @@ var TARGETS = [];
     ((q && q.facilities) || []).forEach(function (f) { matchTargets(f).forEach(function (t) { var c = bySrc(t); if (c) c.quoted = true; }); });
     return targets;
   }
-  var proHeroOpen = null, proTierLists = null;
+  var proHeroOpen = null, proTierLists = null, proTargets = null;
   function renderProTargets(rows, q) {
     if (!$("p-hstat-top32")) return;
     var targets = computeProCoverage(rows, q);
+    proTargets = targets;
     var byTier = { top32: [], next21: [], remaining26: [] };
     targets.forEach(function (t) { var k = tierSlug(t.type); if (byTier[k]) byTier[k].push(t); });
     var totalHit = targets.filter(function (t) { return t.quoted || t.pod; }).length;
