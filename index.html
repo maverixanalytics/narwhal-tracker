@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Narwhal Launch Tracker</title>
+<title>Narwhal / Narwhal Pro Launch Tracker</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap">
 <style>
@@ -66,7 +66,7 @@ table{border-collapse:collapse}
   font-family:var(--font-display); text-transform:uppercase; letter-spacing:var(--tracking-caps);
   font-size:.78rem; font-weight:700; color:var(--mvx-sky); margin-bottom:1.1rem;
 }
-.mvx-masthead h1{
+.mvx-masthead h1{overflow-wrap:break-word; 
   font-family:var(--font-display); font-weight:700; font-size:clamp(3rem,7vw,5.2rem);
   line-height:.95; letter-spacing:.01em; color:#fff;
 }
@@ -78,6 +78,23 @@ table{border-collapse:collapse}
 .mvx-mastmeta span{font-size:.86rem; color:var(--text-invert-soft); white-space:nowrap}
 .mvx-mastmeta span + span::before{content:"\00b7"; margin-right:.55rem; color:var(--mvx-cloud)}
 .mvx-mastmeta strong{color:#fff; font-weight:500}
+
+
+/* ---------- product tabs ---------- */
+.mvx-tabbar{background:var(--page-bg); border-bottom:1px solid var(--frame-line)}
+.mvx-tabbar-inner{max-width:1000px; margin:0 auto; padding:0 72px; display:flex; gap:.4rem; background:var(--surface-card); border-left:1px solid var(--frame-line); border-right:1px solid var(--frame-line)}
+.mvx-tab{appearance:none; background:none; border:0; border-bottom:3px solid transparent; font-family:var(--font-display); font-weight:700; font-size:.95rem; letter-spacing:.14em; text-transform:uppercase; color:var(--text-muted); padding:1.1rem 1.2rem .9rem; cursor:pointer; transition:color var(--dur-base) ease, border-color var(--dur-base) ease}
+.mvx-tab:hover{color:var(--heading)}
+.mvx-tab:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+.mvx-tab[aria-selected="true"]{color:var(--mvx-narwhal-dot); border-bottom-color:var(--mvx-narwhal-dot)}
+@media (max-width:1080px){.mvx-tabbar-inner{padding:0 40px}}
+@media (max-width:560px){.mvx-tabbar-inner{padding:0 12px}.mvx-tab{padding:1rem .8rem .8rem; font-size:.8rem; letter-spacing:.08em}}
+.mvx-tier--static{cursor:default}
+.mvx-tier--static:hover{background:none}
+.mvx-stat-tier--static{cursor:default}
+.mvx-stat-tier--static:hover{background:none}
+.mvx-tbd{color:var(--text-muted); font-style:italic; font-weight:400}
+.mvx-tbdnote{margin-top:1rem; font-size:.86rem; font-style:italic; color:var(--text-note)}
 
 /* ---------- section label ---------- */
 .mvx-seclabel{
@@ -97,8 +114,15 @@ table{border-collapse:collapse}
 .mvx-statcell:hover{background:var(--surface-grid-hover)}
 .mvx-statcell:hover .mvx-statnum{color:var(--accent)}
 .mvx-statlabel{font-family:var(--font-display); text-transform:uppercase; letter-spacing:var(--tracking-caps); font-size:.72rem; font-weight:700; color:var(--mvx-slate)}
+.mvx-statheading{font-family:var(--font-display); font-weight:700; font-size:1.55rem; line-height:1.15; color:var(--mvx-narwhal-dot); text-transform:uppercase; letter-spacing:.04em; display:flex; align-items:center; justify-content:space-between; gap:.8rem; padding-bottom:.9rem; margin-bottom:1rem; border-bottom:1px solid var(--frame-line)}
+.mvx-statheading-img{width:56px; height:56px; flex:none; display:block}
 .mvx-statnum{font-family:var(--font-display); font-weight:700; font-size:2.6rem; line-height:1.1; color:var(--mvx-stat); white-space:nowrap; margin-top:.5rem; font-variant-numeric:tabular-nums; transition:color var(--dur-base) ease}
 .mvx-statnum small{font-family:var(--font-sans); font-size:1rem; font-weight:400; color:var(--mvx-stone); margin-left:.25rem}
+.zn{color:var(--mvx-narwhal-dot) !important; font-weight:700}
+.zr{color:var(--mvx-narwhal-dot) !important}
+.mvx-po-tiers{display:flex; flex-wrap:wrap; gap:.35rem .5rem; margin-top:.6rem}
+.mvx-po-tiers span{font-size:.74rem; color:var(--text-muted); background:var(--surface-tab); border:1px solid var(--border); border-radius:999px; padding:.18rem .6rem; white-space:nowrap}
+.mvx-po-tiers b{font-family:var(--font-display); font-weight:700; color:var(--mvx-narwhal-dot); font-variant-numeric:tabular-nums; margin-right:.2rem}
 .mvx-statsub{font-size:.86rem; color:var(--text-secondary); margin-top:.35rem}
 .mvx-flag{display:inline-flex; align-items:center; gap:.4rem; color:var(--warning); font-weight:500}
 .mvx-flag::before{content:""; width:6px; height:6px; background:var(--warning); flex:none}
@@ -115,13 +139,30 @@ table{border-collapse:collapse}
 .mvx-stat-tiers-title{font-family:var(--font-display); text-transform:uppercase; letter-spacing:var(--tracking-caps); font-size:.72rem; font-weight:700; color:var(--mvx-slate); margin-bottom:1rem}
 .mvx-stat-tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem}
 .mvx-stat-tier{display:flex; flex-direction:column; gap:.4rem; min-width:0}
-.mvx-stat-tier-top{display:flex; justify-content:space-between; align-items:baseline; gap:.4rem}
+.mvx-stat-tier-top{display:flex; justify-content:space-between; align-items:flex-start; gap:.4rem}
 .mvx-stat-tier-name{font-size:.82rem; font-weight:600; color:var(--heading); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .mvx-stat-tier-pct{font-family:var(--font-display); font-size:.82rem; font-weight:700; color:var(--accent); font-variant-numeric:tabular-nums; white-space:nowrap}
 .mvx-stat-tier-pct.mvx-flag{font-size:.82rem}
 .mvx-stat-tier-track{position:relative; height:6px; background:var(--surface-tab); border-radius:var(--radius-xs); overflow:hidden}
 .mvx-stat-tier-fill{position:absolute; top:0; bottom:0; left:0; background:var(--accent); border-radius:var(--radius-xs)}
 .mvx-stat-tier-po{position:absolute; top:0; bottom:0; background:var(--mvx-narwhal-dot); border-left:1px solid #fff; border-radius:0 var(--radius-xs) var(--radius-xs) 0}
+.mvx-stat-tier{cursor:pointer; border-radius:8px; padding:.5rem; margin:-.5rem; transition:background var(--dur-base) ease}
+.mvx-stat-tier:hover{background:var(--surface-tab)}
+.mvx-stat-tier:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.mvx-stat-tier[aria-expanded="true"]{background:var(--surface-tab)}
+.mvx-stat-tier-name{display:inline-flex; align-items:center; gap:.35rem; white-space:normal; overflow:visible; line-height:1.25}
+.mvx-stat-tier-caret{font-size:.65em; color:var(--text-muted); transition:transform var(--dur-base) ease; display:inline-block}
+.mvx-stat-tier[aria-expanded="true"] .mvx-stat-tier-caret{transform:rotate(90deg); color:var(--accent)}
+.mvx-stat-tierpanel{margin-top:1.1rem; padding:1rem 1.2rem; background:var(--surface-tab); border-radius:8px; border:1px solid var(--border)}
+.mvx-stat-tierpanel[hidden]{display:none}
+.mvx-stat-tierpanel-title{font-family:var(--font-display); font-weight:700; font-size:.95rem; color:var(--heading); margin-bottom:.9rem; display:flex; justify-content:space-between; align-items:baseline; gap:.6rem}
+.mvx-stat-tierpanel-title small{font-weight:600; font-size:.72rem; color:var(--text-muted)}
+.mvx-stat-tierpanel .mvx-physlist{grid-template-columns:1fr}
+.mvx-stat-tierpanel .mvx-physrow{flex-wrap:wrap; row-gap:.1rem}
+.mvx-stat-tierpanel .mvx-physname{white-space:normal}
+.mvx-stat-tierpanel .mvx-physinst{flex:1 1 12rem; white-space:normal}
+.mvx-tierpanel-grouplabel.mvx-notq{color:var(--text-muted)}
+.mvx-tierpanel-grouplabel.mvx-notq::before{background:var(--border-strong)}
 .mvx-stat-tiers-head{display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-bottom:1rem}
 .mvx-stat-tiers-head .mvx-stat-tiers-title{margin-bottom:0}
 .mvx-stat-legend{display:flex; gap:.9rem; font-size:.7rem; color:var(--text-muted)}
@@ -130,6 +171,10 @@ table{border-collapse:collapse}
 .mvx-stat-tier-frac{font-size:.72rem; color:var(--text-muted); font-variant-numeric:tabular-nums}
 
 .mvx-live{display:inline-flex; align-items:center; gap:.45rem}
+/* status line may be long ("saved copy from …", reconnect hints): let it wrap on narrow screens */
+.mvx-mastmeta span.mvx-live{white-space:normal; min-width:0; max-width:100%; align-items:flex-start}
+.mvx-mastmeta span.mvx-live::before{margin-top:.45em}
+.mvx-mastmeta{min-width:0}
 .mvx-live::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--mvx-sky); flex:none}
 .mvx-live.stale::before{background:var(--warning)}
 .mvx-live.off::before{background:var(--mvx-stone)}
@@ -150,6 +195,9 @@ table{border-collapse:collapse}
 
 /* ---------- spec table ---------- */
 .mvx-scroll{overflow-x:auto}
+/* PO tables: newest first, five rows visible, the rest scroll under a pinned header */
+.mvx-poscroll{overflow:auto; border-bottom:1px solid var(--border); overscroll-behavior:contain}
+.mvx-poscroll thead th{position:sticky; top:0; z-index:2}
 table.mvx-spec{width:100%; background:#fff; font-size:.92rem; min-width:620px}
 table.mvx-spec th{background:var(--surface-dark); color:#fff; text-align:left; padding:.7rem 1rem; font-weight:600; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; white-space:nowrap}
 table.mvx-spec td{padding:.65rem 1rem; border-bottom:1px solid var(--border); color:var(--text-secondary); position:relative}
@@ -157,7 +205,13 @@ table.mvx-spec tbody tr:hover td{background:var(--surface-grid-hover)}
 table.mvx-spec td.num, table.mvx-spec th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
 table.mvx-spec td.key{font-weight:600; color:var(--mvx-ink)}
 table.mvx-spec td.qty{font-weight:600; color:var(--mvx-teal); text-align:right; white-space:nowrap}
+table.mvx-spec td.tier{font-weight:600; color:var(--accent); white-space:nowrap}
+table.mvx-spec td.tier.other{color:var(--text-muted); font-weight:500}
 table.mvx-spec td.meta{color:var(--text-muted); white-space:nowrap}
+table.mvx-potable{min-width:0; font-size:.84rem}
+table.mvx-potable th{padding:.65rem .55rem; font-size:.74rem; letter-spacing:.04em}
+table.mvx-potable td{padding:.6rem .55rem}
+table.mvx-potable td.meta{white-space:normal; overflow-wrap:anywhere}
 .mvx-cellbar{position:absolute; left:0; top:4px; bottom:4px; background:var(--surface-soft); z-index:0}
 .mvx-cellbar.warm{background:#FBE7DE}
 .mvx-cellbar.tot{background:#CFE0EA}
@@ -277,6 +331,32 @@ table.mvx-spec th.tot, table.mvx-spec td.tot{border-left:2px solid var(--border-
   .mvx-bar-row{grid-template-columns:110px 1fr 44px; gap:.6rem}
   .mvx-seclabel{font-size:.9rem; gap:.8rem}
 }
+/* Narwhal hero: Tusk Rush banner above the kit goal; 2x2 stats left, larger cryo-target breakdown right */
+#tab-narwhal .mvx-statheading.nw-tusk{justify-content:flex-end; padding-bottom:0; margin-bottom:.7rem; border-bottom:none}
+@media (max-width:560px){#tab-narwhal .mvx-statheading.nw-tusk{justify-content:flex-start}}
+#tab-narwhal .nw-hero{grid-template-columns:1.2fr 1fr}
+.nw-quad{display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); gap:2rem 2.2rem}
+.nw-quad .mvx-po-tiers > span{white-space:nowrap}
+.nw-quad > div{min-width:0}
+.nw-cryo{border-right:none; display:flex; flex-direction:column}
+.nw-cryo .mvx-stat-tiers-head{margin-bottom:1.3rem}
+.nw-cryo .mvx-stat-tiers{grid-template-columns:1fr; gap:2rem}
+.nw-cryo .mvx-stat-tier{gap:.55rem}
+.nw-cryo .mvx-stat-tier-name{font-size:1.05rem}
+.nw-cryo .mvx-stat-tier-pct, .nw-cryo .mvx-stat-tier-pct.mvx-flag{font-size:1.35rem}
+.nw-cryo .mvx-stat-tier-track{height:12px}
+.nw-cryo .mvx-stat-tier-frac{font-size:.86rem}
+.nw-cryo-total{display:grid; grid-template-columns:1fr 1fr; gap:.8rem 1.4rem; margin-top:.6rem}
+.nw-tot{min-width:0}
+.nw-tot-title{grid-column:1/-1; margin-bottom:-.4rem; font-family:var(--font-display); text-transform:uppercase; letter-spacing:var(--tracking-caps); font-size:.72rem; font-weight:700; color:var(--mvx-slate)}
+.nw-tot-label{display:flex; align-items:center; gap:.45rem; font-size:.84rem; font-weight:600; color:var(--heading)}
+.nw-tot-label i{width:8px; height:8px; flex:none; display:inline-block}
+.nw-tot-num{font-family:var(--font-display); font-weight:700; font-size:2.2rem; line-height:1.1; color:var(--accent); margin-top:.4rem; font-variant-numeric:tabular-nums}
+.nw-tot-num--po{color:var(--mvx-narwhal-dot)}
+.nw-tot-sub{font-size:.84rem; color:var(--text-secondary); margin-top:.2rem}
+@media (max-width:380px){.nw-cryo-total{grid-template-columns:1fr}}
+@media (max-width:1080px){#tab-narwhal .nw-hero{grid-template-columns:1fr}}
+@media (max-width:560px){.nw-quad{grid-template-columns:1fr; gap:1.4rem}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none !important; animation:none !important}}
 /* ---------- sign-in gate ---------- */
 body.locked > :not(#gate):not(script){display:none !important}
@@ -294,7 +374,7 @@ body:not(.locked) #gate{display:none}
 .mvx-signout{color:inherit; opacity:.75; text-decoration:underline; text-underline-offset:2px}
 .mvx-signout:hover{opacity:1}
 
-/* ---------- phone fit ---------- */
+/* ---------- phone fit (site only; carried over from the Sep 28 "Mobile layout fixes" commit, adapted to the 8-column PO tables) ---------- */
 html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
 html, body{max-width:100%; overflow-x:hidden}
 @supports (overflow:clip){html, body{overflow-x:clip}}
@@ -308,21 +388,24 @@ img, svg{max-width:100%}
   .mvx-seclabel{flex-wrap:wrap; row-gap:.3rem}
   .mvx-statnum{font-size:2.1rem; white-space:normal}
   .mvx-physname, .mvx-physinst{white-space:normal}
-  .mvx-scroll{overflow-x:visible}
+  .mvx-scroll:not(.mvx-poscroll){overflow-x:visible}
   table.mvx-spec{min-width:0; font-size:.84rem}
   table.mvx-spec th{padding:.55rem .45rem; font-size:.66rem; letter-spacing:.03em; white-space:normal}
   table.mvx-spec td{padding:.55rem .45rem}
-  /* POs table becomes one card per PO */
-  table.mvx-spec:has(#po-tbody) thead{display:none}
-  #po-tbody tr{display:grid; grid-template-columns:1fr auto; column-gap:.8rem; row-gap:.15rem; padding:.75rem .8rem; border-bottom:1px solid var(--border)}
-  #po-tbody td{display:block; padding:0; border:0; white-space:normal; text-align:left; min-width:0; overflow-wrap:anywhere}
-  #po-tbody td:nth-child(2){grid-column:1; grid-row:1}
-  #po-tbody td:nth-child(6){grid-column:2; grid-row:1; text-align:right; white-space:nowrap}
-  #po-tbody td:nth-child(1){grid-column:1; grid-row:2}
-  #po-tbody td:nth-child(3){grid-column:2; grid-row:2; text-align:right}
-  #po-tbody td:nth-child(4){grid-column:1; grid-row:3; font-size:.78rem}
-  #po-tbody td:nth-child(5){grid-column:2; grid-row:3; text-align:right; font-size:.78rem}
-  #po-tbody td:nth-child(5)::before{content:"PO "}
+  /* PO tables become one card per PO: account + kits / date + territory / tier + PO# / items */
+  table.mvx-potable thead{display:none}
+  #po-tbody tr, #p-po-tbody tr{display:grid; grid-template-columns:1fr auto; column-gap:.8rem; row-gap:.15rem; padding:.75rem .8rem; border-bottom:1px solid var(--border)}
+  #po-tbody td, #p-po-tbody td{display:block; padding:0; border:0; white-space:normal; text-align:left; min-width:0; overflow-wrap:anywhere}
+  #po-tbody td:nth-child(2), #p-po-tbody td:nth-child(2){grid-column:1; grid-row:1}
+  #po-tbody td:nth-child(8), #p-po-tbody td:nth-child(8){grid-column:2; grid-row:1; text-align:right; white-space:nowrap}
+  #po-tbody td:nth-child(1), #p-po-tbody td:nth-child(1){grid-column:1; grid-row:2}
+  #po-tbody td:nth-child(3), #p-po-tbody td:nth-child(3){grid-column:2; grid-row:2; text-align:right}
+  #po-tbody td:nth-child(4), #p-po-tbody td:nth-child(4){grid-column:1; grid-row:3; font-size:.78rem}
+  #po-tbody td:nth-child(7), #p-po-tbody td:nth-child(7){grid-column:2; grid-row:3; text-align:right; font-size:.78rem}
+  #po-tbody td:nth-child(7)::before, #p-po-tbody td:nth-child(7)::before{content:"PO "}
+  #po-tbody td:nth-child(6), #p-po-tbody td:nth-child(6){grid-column:1 / -1; grid-row:4; font-size:.74rem}
+  #po-tbody td:nth-child(5), #p-po-tbody td:nth-child(5){display:none}
+  #p-po-tbody td[colspan]{grid-column:1 / -1; grid-row:1}
 }
 
 </style>
@@ -345,11 +428,11 @@ img, svg{max-width:100%}
   <div class="mvx-inner">
     <div class="mvx-masthead-copy">
       <p class="mvx-eyebrow">Maverix Medical &middot; Sales Operations</p>
-      <h1>Narwhal Launch Tracker</h1>
+      <h1>Narwhal/<wbr>Narwhal Pro Launch Tracker</h1>
       <p class="mvx-tagline">Quote pipeline, target-account coverage, and kit inventory for the Narwhal cryobiopsy launch.</p>
       <div class="mvx-mastmeta">
-        <span>Launch window <strong>Aug&nbsp;18&ndash;Sep&nbsp;11, 2026</strong></span>
-        <span>Data as of <strong id="asof">&mdash;</strong></span>
+        <span>Launch window <strong>Aug&nbsp;18&ndash;<span id="launch-end"></span></strong></span>
+        <span>Data as of <strong id="asof"></strong></span>
         <span id="sync-note" class="mvx-live off">Signed out</span>
         <a href="#" id="signout" class="mvx-signout">Sign out</a>
       </div>
@@ -360,6 +443,14 @@ img, svg{max-width:100%}
   </div>
 </header>
 
+<nav class="mvx-tabbar" aria-label="Product">
+  <div class="mvx-tabbar-inner" role="tablist">
+    <button type="button" class="mvx-tab" role="tab" id="tabbtn-narwhal" aria-selected="true" aria-controls="tab-narwhal">Narwhal</button>
+    <button type="button" class="mvx-tab" role="tab" id="tabbtn-pro" aria-selected="false" aria-controls="tab-pro">Narwhal Pro</button>
+  </div>
+</nav>
+
+<div id="tab-narwhal" role="tabpanel" aria-labelledby="tabbtn-narwhal">
 <section class="mvx-band">
   <div class="mvx-container">
     <h2 class="mvx-seclabel">Launch to date</h2>
@@ -371,16 +462,17 @@ img, svg{max-width:100%}
           <div class="mvx-statsub" id="rev-sub"></div>
         </div>
         <div class="mvx-rev-goal">
-          <div class="mvx-rev-pct" id="rev-pct"></div>
+          <div class="mvx-statheading nw-tusk"><span>Tusk Rush Update</span><img class="mvx-statheading-img" alt="" src="data:image/png;base64,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"></div>
+          <div class="mvx-rev-pct" id="rev-pct">&mdash;</div>
           <div class="mvx-statsub" id="rev-goalsub"></div>
         </div>
       </div>
       <div class="mvx-rev-track"><div class="mvx-rev-fill" id="rev-fill" style="width:0"></div></div>
       <div class="mvx-rev-scale" id="rev-scale"></div>
     </div>
-    <div class="mvx-statgrid mvx-statgrid--hero">
+    <div class="mvx-statgrid mvx-statgrid--hero nw-hero">
       <div class="mvx-statcell mvx-statcell--hero">
-        <div class="mvx-stat-pair">
+        <div class="nw-quad">
           <div>
             <div class="mvx-statlabel">Quotes Logged</div>
             <div class="mvx-statnum" id="quotes-num">&mdash;</div>
@@ -390,48 +482,51 @@ img, svg{max-width:100%}
             <div class="mvx-statlabel">POs Received</div>
             <div class="mvx-statnum" id="po-num">&mdash;</div>
             <div class="mvx-statsub" id="po-sub"></div>
+            <div class="mvx-po-tiers" id="po-tiers" title="Target accounts that have submitted a PO, by priority tier"><span><b id="po-tier-top32"></b> <span class="zn">Zone 1</span><span class="zr">/<wbr>Top 32</span></span><span><b id="po-tier-next21"></b> <span class="zn">Zone 2</span><span class="zr">/<wbr>Next 21</span></span><span><b id="po-tier-remaining26"></b> <span class="zn">Zone 3</span><span class="zr">/<wbr>Remaining 26</span></span><span><b id="po-tier-other"></b> <span class="zn">Zone 4</span><span class="zr">/<wbr>Other</span></span></div>
+          </div>
+          <div>
+            <div class="mvx-statlabel">Kits Remaining, Oct–Dec</div>
+            <div class="mvx-statnum" id="kits-rem-num">&mdash;</div>
+            <div class="mvx-statsub" id="kits-rem-sub"></div>
+          </div>
+          <div class="nw-tot-tile">
+            <div class="mvx-statlabel">Cryo Targets, All Zones</div>
+            <div class="nw-cryo-total" id="hstat-total">
+              <div class="nw-tot"><div class="nw-tot-label"><i style="background:var(--accent)"></i>Quoted or PO’d</div><div class="nw-tot-num" id="hstat-total-hit-pct">&mdash;</div><div class="nw-tot-sub" id="hstat-total-hit"></div></div>
+              <div class="nw-tot"><div class="nw-tot-label"><i style="background:var(--mvx-narwhal-dot)"></i>PO’d</div><div class="nw-tot-num nw-tot-num--po" id="hstat-total-po-pct">&mdash;</div><div class="nw-tot-sub" id="hstat-total-po" style="display:none"></div></div>
+            </div>
           </div>
         </div>
-        <hr class="mvx-stat-divider">
-        <div class="mvx-stat-tiers-head"><div class="mvx-stat-tiers-title">Cryo Targets</div><div class="mvx-stat-legend"><span><i style="background:var(--accent)"></i>Quoted</span><span><i style="background:var(--mvx-narwhal-dot)"></i>PO&#39;d</span></div></div>
+      </div>
+      <div class="mvx-statcell nw-cryo">
+        <div class="mvx-stat-tiers-head"><div class="mvx-stat-tiers-title">Cryo Targets</div><div class="mvx-stat-legend"><span><i style="background:var(--accent)"></i>Quoted</span><span><i style="background:var(--mvx-narwhal-dot)"></i>PO'd</span></div></div>
         <div class="mvx-stat-tiers">
-          <div class="mvx-stat-tier">
+          <div class="mvx-stat-tier" id="hstat-top32" role="button" tabindex="0" aria-expanded="false" aria-controls="hstat-panel">
             <div class="mvx-stat-tier-top">
-              <span class="mvx-stat-tier-name">Top 32</span>
+              <span class="mvx-stat-tier-name"><span><span class="zn">Zone 1</span><span class="zr">/<wbr>Top 32</span></span><span class="mvx-stat-tier-caret">▸</span></span>
               <span class="mvx-stat-tier-pct" id="hstat-top32-pct">&mdash;</span>
             </div>
             <div class="mvx-stat-tier-track"><div class="mvx-stat-tier-fill" id="hstat-top32-fill" style="width:0"></div><div class="mvx-stat-tier-po" id="hstat-top32-po" style="display:none"></div></div>
             <div class="mvx-stat-tier-frac" id="hstat-top32-frac"></div>
           </div>
-          <div class="mvx-stat-tier">
+          <div class="mvx-stat-tier" id="hstat-next21" role="button" tabindex="0" aria-expanded="false" aria-controls="hstat-panel">
             <div class="mvx-stat-tier-top">
-              <span class="mvx-stat-tier-name">Next 21</span>
+              <span class="mvx-stat-tier-name"><span><span class="zn">Zone 2</span><span class="zr">/<wbr>Next 21</span></span><span class="mvx-stat-tier-caret">▸</span></span>
               <span class="mvx-stat-tier-pct mvx-flag" id="hstat-next21-pct">&mdash;</span>
             </div>
             <div class="mvx-stat-tier-track"><div class="mvx-stat-tier-fill" id="hstat-next21-fill" style="width:0"></div><div class="mvx-stat-tier-po" id="hstat-next21-po" style="display:none"></div></div>
             <div class="mvx-stat-tier-frac" id="hstat-next21-frac"></div>
           </div>
-          <div class="mvx-stat-tier">
+          <div class="mvx-stat-tier" id="hstat-remaining26" role="button" tabindex="0" aria-expanded="false" aria-controls="hstat-panel">
             <div class="mvx-stat-tier-top">
-              <span class="mvx-stat-tier-name">Remaining 26</span>
+              <span class="mvx-stat-tier-name"><span><span class="zn">Zone 3</span><span class="zr">/<wbr>Remaining 26</span></span><span class="mvx-stat-tier-caret">▸</span></span>
               <span class="mvx-stat-tier-pct" id="hstat-remaining26-pct">&mdash;</span>
             </div>
             <div class="mvx-stat-tier-track"><div class="mvx-stat-tier-fill" id="hstat-remaining26-fill" style="width:0"></div><div class="mvx-stat-tier-po" id="hstat-remaining26-po" style="display:none"></div></div>
             <div class="mvx-stat-tier-frac" id="hstat-remaining26-frac"></div>
           </div>
         </div>
-      </div>
-      <div class="mvx-stat-stack">
-        <div class="mvx-statcell">
-          <div class="mvx-statlabel">Kits Remaining, Oct&ndash;Dec</div>
-          <div class="mvx-statnum" id="kits-rem-num">&mdash;</div>
-          <div class="mvx-statsub" id="kits-rem-sub"></div>
-        </div>
-        <div class="mvx-statcell">
-          <div class="mvx-statlabel">Territories Yet to Receive a PO</div>
-          <div class="mvx-statnum" id="nopo-num">&mdash;</div>
-          <div class="mvx-statsub" id="nopo-sub"></div>
-        </div>
+        <div class="mvx-stat-tierpanel" id="hstat-panel" hidden=""></div>
       </div>
     </div>
   </div>
@@ -441,10 +536,10 @@ img, svg{max-width:100%}
   <div class="mvx-container">
     <h2 class="mvx-seclabel">POs Received, by Account <span class="mvx-secnote" id="po-secnote"></span></h2>
     <p class="mvx-secdesc">Purchase orders received against quoted accounts, mapped to territory.</p>
-    <div class="mvx-scroll">
-      <table class="mvx-spec">
+    <div class="mvx-scroll mvx-poscroll" style="max-height: 311px;">
+      <table class="mvx-spec mvx-potable">
         <thead>
-          <tr><th>Date</th><th>Account</th><th>Territory</th><th>Item(s)</th><th>PO&nbsp;#</th><th class="num">Kits</th></tr>
+          <tr><th>Date</th><th>Account</th><th>Territory</th><th>Tier</th><th class="num" title="POs placed by this account to date">Orders</th><th>Item(s)</th><th>PO&nbsp;#</th><th class="num">Kits</th></tr>
         </thead>
         <tbody id="po-tbody"></tbody>
       </table>
@@ -475,25 +570,25 @@ img, svg{max-width:100%}
     </div>
     <div class="mvx-tiers">
       <div class="mvx-tier" id="tier-top32" role="button" tabindex="0" aria-expanded="false" aria-controls="tier-panel-top32">
-        <div class="mvx-tier-head"><span class="mvx-tier-name">Top 32<span class="mvx-tier-caret">&#9656;</span></span><span class="mvx-tier-pct" id="tier-pct-top32">&mdash;</span></div>
+        <div class="mvx-tier-head"><span class="mvx-tier-name"><span class="zn">Zone 1</span><span class="zr">/<wbr>Top 32</span><span class="mvx-tier-caret">▸</span></span><span class="mvx-tier-pct" id="tier-pct-top32"></span></div>
         <div class="mvx-tier-track"><div class="mvx-tier-fill" id="tier-fill-top32" style="width:0"></div><div class="mvx-tier-po" id="tier-po-top32" style="display:none"></div></div>
         <div class="mvx-tier-foot" id="tier-foot-top32"></div>
       </div>
       <div class="mvx-tier" id="tier-next21" role="button" tabindex="0" aria-expanded="false" aria-controls="tier-panel-next21">
-        <div class="mvx-tier-head"><span class="mvx-tier-name">Next 21<span class="mvx-tier-caret">&#9656;</span></span><span class="mvx-tier-pct" id="tier-pct-next21">&mdash;</span></div>
+        <div class="mvx-tier-head"><span class="mvx-tier-name"><span class="zn">Zone 2</span><span class="zr">/<wbr>Next 21</span><span class="mvx-tier-caret">▸</span></span><span class="mvx-tier-pct" id="tier-pct-next21"></span></div>
         <div class="mvx-tier-track"><div class="mvx-tier-fill" id="tier-fill-next21" style="width:0"></div><div class="mvx-tier-po" id="tier-po-next21" style="display:none"></div></div>
         <div class="mvx-tier-foot" id="tier-foot-next21"></div>
       </div>
       <div class="mvx-tier" id="tier-remaining26" role="button" tabindex="0" aria-expanded="false" aria-controls="tier-panel-remaining26">
-        <div class="mvx-tier-head"><span class="mvx-tier-name">Remaining 26<span class="mvx-tier-caret">&#9656;</span></span><span class="mvx-tier-pct" id="tier-pct-remaining26">&mdash;</span></div>
+        <div class="mvx-tier-head"><span class="mvx-tier-name"><span class="zn">Zone 3</span><span class="zr">/<wbr>Remaining 26</span><span class="mvx-tier-caret">▸</span></span><span class="mvx-tier-pct" id="tier-pct-remaining26"></span></div>
         <div class="mvx-tier-track"><div class="mvx-tier-fill" id="tier-fill-remaining26" style="width:0"></div><div class="mvx-tier-po" id="tier-po-remaining26" style="display:none"></div></div>
         <div class="mvx-tier-foot" id="tier-foot-remaining26"></div>
       </div>
     </div>
     <div class="mvx-tierpanels">
-      <div class="mvx-tierpanel" id="tier-panel-top32" hidden></div>
-      <div class="mvx-tierpanel" id="tier-panel-next21" hidden></div>
-      <div class="mvx-tierpanel" id="tier-panel-remaining26" hidden></div>
+      <div class="mvx-tierpanel" id="tier-panel-top32" hidden=""></div>
+      <div class="mvx-tierpanel" id="tier-panel-next21" hidden=""></div>
+      <div class="mvx-tierpanel" id="tier-panel-remaining26" hidden=""></div>
     </div>
   </div>
 </section>
@@ -519,7 +614,7 @@ img, svg{max-width:100%}
     <p class="mvx-secdesc" id="mix-desc"></p>
     <div class="mvx-donut-wrap">
       <div class="mvx-donut">
-        <svg id="donut-svg" viewBox="0 0 180 180" role="img" aria-label="Quote configuration mix across 97 quotes">
+        <svg id="donut-svg" viewBox="0 0 180 180" role="img" aria-label="Quote configuration mix across 209 quotes">
           <circle cx="90" cy="90" r="72" fill="none" stroke="#E8EAEE" stroke-width="20"></circle>
           <g id="donut-arcs"></g>
         </svg>
@@ -529,6 +624,177 @@ img, svg{max-width:100%}
     </div>
   </div>
 </section>
+
+</div>
+
+<div id="tab-pro" role="tabpanel" aria-labelledby="tabbtn-pro" hidden>
+<section class="mvx-band">
+  <div class="mvx-container">
+    <h2 class="mvx-seclabel">Narwhal Pro: Launch to date</h2>
+    <div class="mvx-revenue">
+      <div class="mvx-rev-head">
+        <div>
+          <div class="mvx-statlabel">Revenue, Launch to Date</div>
+          <div class="mvx-rev-num" id="p-rev-num">&mdash;</div>
+          <div class="mvx-statsub" id="p-rev-sub"></div>
+        </div>
+        <div class="mvx-rev-goal">
+          <div class="mvx-rev-pct" id="p-rev-pct">&mdash;</div>
+          <div class="mvx-statsub" id="p-rev-goalsub"></div>
+        </div>
+      </div>
+      <div class="mvx-rev-track"><div class="mvx-rev-fill" id="p-rev-fill" style="width:0"></div></div>
+      <div class="mvx-rev-scale"><span>$0</span><span id="p-rev-scale"></span></div>
+    </div>
+    <div class="mvx-statgrid mvx-statgrid--hero">
+      <div class="mvx-statcell mvx-statcell--hero">
+        <div class="mvx-stat-pair">
+          <div>
+            <div class="mvx-statlabel">Quotes Logged</div>
+            <div class="mvx-statnum" id="p-quotes-num">&mdash;</div>
+            <div class="mvx-statsub" id="p-quotes-sub"></div>
+          </div>
+          <div>
+            <div class="mvx-statlabel">POs Received</div>
+            <div class="mvx-statnum" id="p-po-num">&mdash;</div>
+            <div class="mvx-statsub" id="p-po-sub"></div>
+            <div class="mvx-po-tiers" title="Target accounts that have submitted a Pro PO, by priority tier"><span><b id="p-po-tier-top32"></b> <span class="zn">Zone 1</span><span class="zr">/<wbr>Top 32</span></span><span><b id="p-po-tier-next21"></b> <span class="zn">Zone 2</span><span class="zr">/<wbr>Next 21</span></span><span><b id="p-po-tier-remaining26"></b> <span class="zn">Zone 3</span><span class="zr">/<wbr>Remaining 26</span></span><span><b id="p-po-tier-other"></b> <span class="zn">Zone 4</span><span class="zr">/Other</span></span></div>
+          </div>
+        </div>
+        <hr class="mvx-stat-divider">
+        <div class="mvx-stat-tiers-head"><div class="mvx-stat-tiers-title">Cryo Targets</div><div class="mvx-stat-legend"><span><i style="background:var(--accent)"></i>Quoted</span><span><i style="background:var(--mvx-narwhal-dot)"></i>PO'd</span></div></div>
+        <div class="mvx-stat-tiers">
+          <div class="mvx-stat-tier" id="p-hstat-top32" role="button" tabindex="0" aria-expanded="false" aria-controls="p-hstat-panel">
+            <div class="mvx-stat-tier-top">
+              <span class="mvx-stat-tier-name"><span><span class="zn">Zone 1</span><span class="zr">/<wbr>Top 32</span></span><span class="mvx-stat-tier-caret">▸</span></span>
+              <span class="mvx-stat-tier-pct" id="p-hstat-top32-pct">&mdash;</span>
+            </div>
+            <div class="mvx-stat-tier-track"><div class="mvx-stat-tier-fill" id="p-hstat-top32-fill" style="width:0"></div><div class="mvx-stat-tier-po" id="p-hstat-top32-po" style="display:none"></div></div>
+            <div class="mvx-stat-tier-frac" id="p-hstat-top32-frac"></div>
+          </div>
+          <div class="mvx-stat-tier" id="p-hstat-next21" role="button" tabindex="0" aria-expanded="false" aria-controls="p-hstat-panel">
+            <div class="mvx-stat-tier-top">
+              <span class="mvx-stat-tier-name"><span><span class="zn">Zone 2</span><span class="zr">/<wbr>Next 21</span></span><span class="mvx-stat-tier-caret">▸</span></span>
+              <span class="mvx-stat-tier-pct" id="p-hstat-next21-pct">&mdash;</span>
+            </div>
+            <div class="mvx-stat-tier-track"><div class="mvx-stat-tier-fill" id="p-hstat-next21-fill" style="width:0"></div><div class="mvx-stat-tier-po" id="p-hstat-next21-po" style="display:none"></div></div>
+            <div class="mvx-stat-tier-frac" id="p-hstat-next21-frac"></div>
+          </div>
+          <div class="mvx-stat-tier" id="p-hstat-remaining26" role="button" tabindex="0" aria-expanded="false" aria-controls="p-hstat-panel">
+            <div class="mvx-stat-tier-top">
+              <span class="mvx-stat-tier-name"><span><span class="zn">Zone 3</span><span class="zr">/<wbr>Remaining 26</span></span><span class="mvx-stat-tier-caret">▸</span></span>
+              <span class="mvx-stat-tier-pct" id="p-hstat-remaining26-pct">&mdash;</span>
+            </div>
+            <div class="mvx-stat-tier-track"><div class="mvx-stat-tier-fill" id="p-hstat-remaining26-fill" style="width:0"></div><div class="mvx-stat-tier-po" id="p-hstat-remaining26-po" style="display:none"></div></div>
+            <div class="mvx-stat-tier-frac" id="p-hstat-remaining26-frac"></div>
+          </div>
+        </div>
+        <div class="mvx-stat-tierpanel" id="p-hstat-panel" hidden=""></div>
+      </div>
+      <div class="mvx-stat-stack">
+        <div class="mvx-statcell">
+          <div class="mvx-statlabel">Kits Remaining, Oct–Dec</div>
+          <div class="mvx-statnum" id="p-kits-rem-num">&mdash;</div>
+          <div class="mvx-statsub" id="p-kits-rem-sub"></div>
+        </div>
+        <div class="mvx-statcell">
+          <div class="mvx-statlabel">Territories Yet to Receive a PO</div>
+          <div class="mvx-statnum" id="p-nopo-num">&mdash;</div>
+          <div class="mvx-statsub" id="p-nopo-sub"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mvx-band row-line">
+  <div class="mvx-container">
+    <h2 class="mvx-seclabel">Pro POs Received, by Account <span class="mvx-secnote" id="p-po-secnote"></span></h2>
+    <p class="mvx-secdesc">Purchase orders for Narwhal Pro (NWL-2004-KIT), mapped to territory.</p>
+    <div class="mvx-scroll mvx-poscroll">
+      <table class="mvx-spec mvx-potable">
+        <thead>
+          <tr><th>Date</th><th>Account</th><th>Territory</th><th>Tier</th><th class="num" title="POs placed by this account to date">Orders</th><th>Item(s)</th><th>PO&nbsp;#</th><th class="num">Units</th></tr>
+        </thead>
+        <tbody id="p-po-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="mvx-band row-line">
+  <div class="mvx-container">
+    <h2 class="mvx-seclabel">Pro Quotes by Territory <span class="mvx-secnote" id="p-terr-secnote"></span></h2>
+    <p class="mvx-secdesc">Pro quotes logged plus Pro POs received per territory, with the rep of record.</p>
+    <div class="mvx-legend">
+      <span class="mvx-legend-item"><span class="mvx-swatch" style="background:var(--accent)"></span>Quotes logged</span>
+      <span class="mvx-legend-item"><span class="mvx-swatch" style="background:var(--mvx-narwhal-dot)"></span>POs received (count)</span>
+    </div>
+    <div class="mvx-bars" id="p-terr-bars"></div>
+    <div class="mvx-gapnote" id="p-terr-gapnote"></div>
+  </div>
+</section>
+
+<section class="mvx-band row-line">
+  <div class="mvx-container">
+    <h2 class="mvx-seclabel">Pro Target Account Coverage <span class="mvx-secnote" id="p-tac-secnote"></span></h2>
+    <p class="mvx-secdesc">Share of the Narwhal launch target list with a Pro quote or Pro PO, by priority zone (same target list as the Narwhal tab).</p>
+    <div class="mvx-legend">
+      <span class="mvx-legend-item"><span class="mvx-swatch" style="background:var(--accent)"></span>Quoted</span>
+      <span class="mvx-legend-item"><span class="mvx-swatch" style="background:var(--mvx-narwhal-dot)"></span>PO'd</span>
+    </div>
+    <div class="mvx-tiers">
+      <div class="mvx-tier mvx-tier--static">
+        <div class="mvx-tier-head"><span class="mvx-tier-name"><span class="zn">Zone 1</span><span class="zr">/<wbr>Top 32</span></span><span class="mvx-tier-pct" id="p-tier-pct-top32"></span></div>
+        <div class="mvx-tier-track"><div class="mvx-tier-fill" id="p-tier-fill-top32" style="width: 31.25%; border-radius: 4px 0px 0px 4px;"></div><div class="mvx-tier-po" id="p-tier-po-top32" style="left: 31.25%; width: 3.13%;"></div></div>
+        <div class="mvx-tier-foot" id="p-tier-foot-top32"></div>
+      </div>
+      <div class="mvx-tier mvx-tier--static">
+        <div class="mvx-tier-head"><span class="mvx-tier-name"><span class="zn">Zone 2</span><span class="zr">/<wbr>Next 21</span></span><span class="mvx-tier-pct" id="p-tier-pct-next21"></span></div>
+        <div class="mvx-tier-track"><div class="mvx-tier-fill" id="p-tier-fill-next21" style="width: 19.05%;"></div><div class="mvx-tier-po" id="p-tier-po-next21" style="display:none"></div></div>
+        <div class="mvx-tier-foot" id="p-tier-foot-next21"></div>
+      </div>
+      <div class="mvx-tier mvx-tier--static">
+        <div class="mvx-tier-head"><span class="mvx-tier-name"><span class="zn">Zone 3</span><span class="zr">/<wbr>Remaining 26</span></span><span class="mvx-tier-pct" id="p-tier-pct-remaining26"></span></div>
+        <div class="mvx-tier-track"><div class="mvx-tier-fill" id="p-tier-fill-remaining26" style="width: 26.92%; border-radius: 4px 0px 0px 4px;"></div><div class="mvx-tier-po" id="p-tier-po-remaining26" style="left: 26.92%; width: 3.85%;"></div></div>
+        <div class="mvx-tier-foot" id="p-tier-foot-remaining26"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mvx-band row-line">
+  <div class="mvx-container">
+    <h2 class="mvx-seclabel">Pro Kit Inventory, Q4 2026</h2>
+    <p class="mvx-secdesc">Planned Pro kit allocation against Pro kits on POs received to date. Allocation is a placeholder until provided.</p>
+    <div class="mvx-scroll">
+      <table class="mvx-spec">
+        <thead>
+          <tr><th>Item</th><th class="num">Oct</th><th class="num">Nov</th><th class="num">Dec</th><th class="num tot">Total 2026</th></tr>
+        </thead>
+        <tbody id="p-inv-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="mvx-band row-line">
+  <div class="mvx-container">
+    <h2 class="mvx-seclabel">Pro Quote Type Mix</h2>
+    <p class="mvx-secdesc" id="p-mix-desc"></p>
+    <div class="mvx-donut-wrap">
+      <div class="mvx-donut">
+        <svg id="p-donut-svg" viewBox="0 0 180 180" role="img" aria-label="Pro quote configuration mix">
+          <circle cx="90" cy="90" r="72" fill="none" stroke="#E8EAEE" stroke-width="20"></circle>
+          <g id="p-donut-arcs"></g>
+        </svg>
+        <div class="mvx-donut-center"><strong id="p-donut-total">&mdash;</strong><span>Quotes</span></div>
+      </div>
+      <div class="mvx-legendlist" id="p-mix-legend"></div>
+    </div>
+  </div>
+</section>
+</div>
 
 <footer class="mvx-footer">
   <div class="mvx-container">
@@ -578,6 +844,26 @@ var TARGETS = [];
     return bestD <= (k.length > 6 ? 2 : 1) ? best : null;
   }
   function poTerritory(r) { return canonTerritory(r.sheetTerr) || territory(r.customer); }
+  
+  function newestFirst(rows) {
+    return rows.map(function (r, i) { return { r: r, i: i, d: rowDate(r.date) || 0 }; })
+      .sort(function (a, b) { return b.d - a.d || b.i - a.i; }).map(function (x) { return x.r; });
+  }
+  
+  function fitPoTables() {
+    var w = document.querySelectorAll(".mvx-poscroll");
+    for (var k = 0; k < w.length; k++) {
+      var el = w[k], head = el.querySelector("thead"), trs = el.querySelectorAll("tbody tr");
+      
+      if (trs.length <= 5 || !el.offsetParent) { el.style.maxHeight = ""; continue; }
+      var h = head ? head.offsetHeight : 0;
+      for (var j = 0; j < 5; j++) h += trs[j].offsetHeight;
+      el.style.maxHeight = (h + 1) + "px";
+    }
+  }
+  window.addEventListener("resize", fitPoTables);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitPoTables);
+  setTimeout(fitPoTables, 0);
   function fmtDate(d) {
     var m = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec(String(d).trim());
     return m ? MON[+m[1] - 1] + " " + +m[2] : String(d).trim();
@@ -591,7 +877,8 @@ var TARGETS = [];
       if (!v) return;
       if (m.date === undefined && /date/.test(v)) { m.date = i; seen++; }
       else if (m.customer === undefined && /customer|account|ship/.test(v)) { m.customer = i; seen++; }
-      else if (m.po === undefined && /\bpo\b|po ?#|order/.test(v)) { m.po = i; seen++; }
+      else if (/\bpo\b|po ?#/.test(v) && (m.po === undefined || m.poIsOrder)) { if (m.po === undefined) seen++; m.po = i; m.poIsOrder = false; }
+      else if (m.po === undefined && /order/.test(v)) { m.po = i; m.poIsOrder = true; seen++; }
       else if (m.item === undefined && /item|product|sku|part/.test(v)) { m.item = i; seen++; }
       else if (m.qty === undefined && /qty|quantity|units/.test(v)) { m.qty = i; seen++; }
       else if (m.terr === undefined && /territor|region/.test(v)) { m.terr = i; }
@@ -601,11 +888,12 @@ var TARGETS = [];
   }
   function guessCols(cells) {
     for (var i = 3; i < cells.length - 1; i++) {
-      if (/\b(MCB|CC)-/i.test(cells[i])) return { date: i - 3, customer: i - 2, po: i - 1, item: i, qty: i + 1, terr: i > 3 ? i - 4 : undefined };
+      if (/\b(MCBP?|CC|NWL)-/i.test(cells[i])) return { date: i - 3, customer: i - 2, po: i - 1, item: i, qty: i + 1, terr: i > 3 ? i - 4 : undefined };
     }
     return null;
   }
 
+  var PRO_ITEM = /^(MCBP|NWL-?2\d{3})/i, PRO_CODE = /MCBP|NWL-?2\d{3}/i;
   function parseSheet(text) {
     var rows = [], lines = String(text).split("\n"), col = null;
     for (var i = 0; i < lines.length; i++) {
@@ -626,16 +914,18 @@ var TARGETS = [];
       if (!date || /date/i.test(date)) continue;
       var items = String(cells[col.item] || "").split(/\s+/).filter(Boolean);
       var qtys = String(cells[col.qty] || "").split(/\s+/).filter(Boolean);
-      var kits = 0, carts = 0;
+      var kits = 0, carts = 0, proKits = 0, proPacks = 0;
       for (var j = 0; j < items.length; j++) {
         var q = parseInt(qtys[j], 10); if (isNaN(q)) q = j === 0 ? parseInt(qtys[0], 10) || 0 : 0;
-        if (/^MCB/i.test(items[j])) kits += q; else if (/^CC/i.test(items[j])) carts += q;
+        
+        if (PRO_ITEM.test(items[j])) { if (/^MCBP.*-4$/i.test(items[j])) proPacks += q; else proKits += q; }
+        else if (/^(MCB|NWL-?1000)/i.test(items[j])) kits += q; else if (/^CC/i.test(items[j])) carts += q;
       }
       rows.push({
         date: date, customer: cells[col.customer] || "", po: cells[col.po] || "",
         sheetTerr: col.terr !== undefined ? cells[col.terr] || "" : "",
         item: items.map(function (x) { return x.replace(/^MCB-100-/i, "MCB-1000-"); }).join(" + "),
-        kits: kits, carts: carts
+        kits: kits, carts: carts, proKits: proKits, proPacks: proPacks
       });
     }
     return rows;
@@ -677,28 +967,47 @@ var TARGETS = [];
     var y = +m[3]; if (y < 100) y += 2000;
     return Date.UTC(y, +m[1] - 1, +m[2]);
   }
-  var NARWHAL = /n\s*a\s*r\s*w\s*[ah]{0,2}\s*l|cryobiops|MCB-?100?0|CC-?1000/i;
+  var NARWHAL = /n\s*a\s*r\s*w\s*[ah]{0,2}\s*l|cryobiops|MCB-?100?0|NWL-?1000|CC-?1000/i;
   var OTHER_PRODUCT = /bonastent|hilzo|ebus|y ?stent|forceps|netis|serpex|needle|straight stent|retrieval net|\bTT8|\bBU4|\bEVP|\bMED-/i;
   function quoteConfig(p) {
     if (OTHER_PRODUCT.test(p)) return "other";
     if (/cartridge|CC-1000/i.test(p)) return "cart";
     return "only";
   }
+  
+  var NARWHAL_PRO_NAME = /n\s*a\s*r\s*w\s*[ah]{0,2}\s*l\w*\s*pro\b/gi;
+  function proSplit(prod) {
+    var proMention = /\bpro\b/i.test(prod) || PRO_CODE.test(prod);
+    var stripped = prod.replace(NARWHAL_PRO_NAME, " ").replace(/(MCBP|NWL-?2\d{3})\S*/gi, " ");
+    var narwhal = NARWHAL.test(stripped);
+    var pro = proMention && (NARWHAL.test(prod) || PRO_CODE.test(prod));
+    return { pro: pro, narwhal: narwhal, stripped: stripped };
+  }
   function parseQuotes(csv) {
-    var rows = parseCsv(csv), out = { total: 0, byTerritory: {}, mix: { cart: 0, only: 0, other: 0 }, unmapped: [], facilities: [], last: 0 };
+    var rows = parseCsv(csv), out = { total: 0, byTerritory: {}, mix: { cart: 0, only: 0, other: 0 }, unmapped: [], facilities: [], last: 0,
+      pro: { total: 0, byTerritory: {}, mix: { only: 0, cart: 0, combo: 0 }, facilities: [], last: 0 } };
     for (var i = 1; i < rows.length; i++) {
       var r = rows[i]; if (!r || r.length < 4) continue;
       var d = rowDate(r[0]); if (d === null || d < WINDOW_START) continue;
-      var prod = r[3] || ""; if (!NARWHAL.test(prod)) continue;
+      var prod = r[3] || ""; if (!NARWHAL.test(prod) && !PRO_CODE.test(prod)) continue;
+      var sp = proSplit(prod);
+      var t = REP_TERRITORY[String(r[1] || "").trim().toLowerCase()];
+      if (sp.pro) {
+        out.pro.total++;
+        out.pro.facilities.push(r[2] || "");
+        if (d > out.pro.last) out.pro.last = d;
+        out.pro.mix[sp.narwhal ? "combo" : (/cartridge|cartidge|CC-1000|MCBP\S*-4/i.test(prod) ? "cart" : "only")]++;
+        if (t) out.pro.byTerritory[t] = (out.pro.byTerritory[t] || 0) + 1;
+      }
+      if (sp.pro && !sp.narwhal) continue;
       out.total++;
       out.facilities.push(r[2] || "");
       if (d > out.last) out.last = d;
-      out.mix[quoteConfig(prod)]++;
-      var t = REP_TERRITORY[String(r[1] || "").trim().toLowerCase()];
+      out.mix[quoteConfig(sp.pro ? sp.stripped : prod)]++;
       if (t) out.byTerritory[t] = (out.byTerritory[t] || 0) + 1;
       else { var n = String(r[1] || "").trim() || "(no rep)"; if (out.unmapped.indexOf(n) === -1) out.unmapped.push(n); }
     }
-    return out.total ? out : null;
+    return (out.total || out.pro.total) ? out : null;
   }
 
   function quotesFor(t) {
@@ -754,13 +1063,14 @@ var TARGETS = [];
       var t = poTerritory(r);
       if (t) poByT[t] = (poByT[t] || 0) + 1; else if (unassigned.indexOf(r.customer) === -1) unassigned.push(r.customer);
     });
-    var rev = kits * KIT + carts * CART, pct = rev / GOAL * 100;
+    
+    var rev = kits * KIT + carts * CART, pct = kits / ALLOC_TOTAL * 100;
     var remain = ALLOC_TOTAL - kits, octRemain = ALLOC_OCT - kits;
 
     $("rev-num").textContent = money(rev);
     $("rev-sub").innerHTML = kits + " kits &times; " + money(KIT) + (carts ? " + " + carts + " cartridge 4-pack" + (carts === 1 ? "" : "s") + " &times; " + money(CART) : "");
-    $("rev-pct").textContent = pct.toFixed(1) + "% of 2026 goal";
-    $("rev-goalsub").textContent = money(GOAL - rev) + " to go against the " + money(GOAL) + " goal";
+    $("rev-pct").textContent = pct.toFixed(1) + "% of 2026 kit goal";
+    $("rev-goalsub").textContent = Math.max(0, ALLOC_TOTAL - kits) + " kits to go against the " + ALLOC_TOTAL + "-kit goal";
     $("rev-fill").style.width = Math.max(0, Math.min(100, pct)) + "%";
     $("po-num").innerHTML = rows.length + '<small>/ ' + kits + " kits</small>";
     $("po-sub").textContent = kits + " kits and " + carts + " cartridge 4-packs ordered to date";
@@ -769,11 +1079,27 @@ var TARGETS = [];
     $("po-secnote").innerHTML = rows.length + " POs &middot; " + kits + " kits";
     $("terr-secnote").textContent = totalQuotes() + " quotes + " + rows.length + " POs";
 
-    $("po-tbody").innerHTML = rows.map(function (r) {
+    
+    var TIER_RANK = { top32: 0, next21: 1, remaining26: 2 };
+    function poTierOf(customer) {
+      var ms = matchTargets(customer), best = null;
+      ms.forEach(function (t) { var k = tierSlug(t.type); if (best === null || TIER_RANK[k] < TIER_RANK[best]) best = k; });
+      return best ? TIER_LABEL[best] : ZONE4_LABEL;
+    }
+    
+    function accountKey(customer) {
+      return String(customer).toLowerCase().replace(/,\s*[a-z]{2}\s*$/, "").replace(/[^a-z0-9]+/g, " ")
+        .replace(/\b(the|hospital|hospitals|medical|center|centre|health|inc|llc)\b/g, " ").replace(/\s+/g, " ").trim();
+    }
+    var orderCount = {};
+    rows.forEach(function (r) { var k = accountKey(r.customer); orderCount[k] = (orderCount[k] || 0) + 1; });
+    $("po-tbody").innerHTML = newestFirst(rows).map(function (r) {
+      var tier = poTierOf(r.customer), orders = orderCount[accountKey(r.customer)] || 1;
       var qty = r.kits + " kit" + (r.kits === 1 ? "" : "s") + (r.carts ? " + " + r.carts + " pack" + (r.carts === 1 ? "" : "s") : "");
       return '<tr><td class="meta">' + esc(fmtDate(r.date)) + '</td><td class="key">' + esc(r.customer) +
-        "</td><td>" + esc(poTerritory(r) || "Unassigned") + '</td><td class="meta">' + esc(r.item) +
-        '</td><td class="meta">' + esc(r.po) + '</td><td class="qty">' + qty + "</td></tr>";
+        "</td><td>" + esc(poTerritory(r) || "Unassigned") + '</td><td class="tier' + (tier === ZONE4_LABEL ? " other" : "") + '">' + zoneHtml(tier) +
+        '</td><td class="num">' + orders + '</td><td class="meta">' + esc(r.item) + '</td><td class="meta">' + esc(r.po) +
+        '</td><td class="qty">' + qty + "</td></tr>";
     }).join("");
 
     renderInventory(kits);
@@ -792,21 +1118,30 @@ var TARGETS = [];
         '<div class="mvx-bar-value">' + tot + (p ? "<span>" + quotes + "+" + p + "</span>" : "") + "</div></div>";
     }).join("");
 
-    var gap = QUOTES.filter(function (q) { return !poByT[q[0]] && q[0] !== "Phoenix"; });
+    var gap = QUOTES.filter(function (q) { return !poByT[q[0]] && q[0] !== "Phoenix" && q[0] !== "Other"; });
     $("terr-gapnote").innerHTML = "<span>No POs yet:</span>" +
       gap.map(function (q) { return '<span class="mvx-chip">' + esc(q[0]) + " &middot; " + esc(q[1]) + "</span>"; }).join("") +
       (unassigned.length ? '<span class="mvx-chip warnchip">Account not mapped: ' + esc(unassigned.join(", ")) + "</span>" : "") +
       (state.quotes && state.quotes.unmapped.length ? '<span class="mvx-chip warnchip">Rep not mapped: ' + esc(state.quotes.unmapped.join(", ")) + "</span>" : "");
 
-    var nopo = QUOTES.filter(function (q) { return !poByT[q[0]]; }).map(function (q) { return q[0]; });
-    $("nopo-num").innerHTML = nopo.length + "<small>/ " + QUOTES.length + "</small>";
-    $("nopo-sub").textContent = nopo.join(", ");
+    var realT = QUOTES.filter(function (q) { return q[0] !== "Other" && q[0] !== "Phoenix"; });
+    var nopo = realT.filter(function (q) { return !poByT[q[0]]; }).map(function (q) { return q[0]; });
+    if ($("nopo-num")) {
+      $("nopo-num").innerHTML = nopo.length + "<small>/ " + realT.length + "</small>";
+      $("nopo-sub").textContent = nopo.join(", ");
+    }
 
     return true;
   }
 
   
-  var TIER_LABEL = { top32: "Top 32", next21: "Next 21", remaining26: "Remaining 26" };
+  var TIER_LABEL = { top32: "Zone 1/Top 32", next21: "Zone 2/Next 21", remaining26: "Zone 3/Remaining 26" };
+  var ZONE4_LABEL = "Zone 4/Other";
+  
+  function zoneHtml(label) {
+    var m = /^(Zone \d)(\/.*)$/.exec(String(label));
+    return m ? '<span class="zn">' + m[1] + '</span><span class="zr">' + esc(m[2]) + "</span>" : esc(label);
+  }
   function tierSlug(t) { return String(t).toLowerCase().replace(/\s+/g, ""); }
 
   
@@ -959,7 +1294,7 @@ var TARGETS = [];
     var targets = buildTargets();
     if (state.po) {
       targets.forEach(function (t) { t.pod = false; });
-      state.po.forEach(function (r) { matchTargets(r.customer).forEach(function (t) { t.pod = true; }); });
+      poNarwhal(state.po).forEach(function (r) { matchTargets(r.customer).forEach(function (t) { t.pod = true; }); });
     }
     if (state.quotes && state.quotes.facilities) {
       targets.forEach(function (t) { t.quoted = false; });
@@ -970,9 +1305,9 @@ var TARGETS = [];
   }
 
   function physRow(t, badgeKind) {
-    var badge = badgeKind === "tier" ? t.type : t.territory;
+    var badge = badgeKind === "tier" ? (TIER_LABEL[tierSlug(t.type)] || t.type) : t.territory;
     return '<div class="mvx-physrow"><span class="mvx-physname">' + esc(t.phys) + '</span><span class="mvx-physinst">' +
-      esc(t.inst) + ", " + esc(t.city) + '</span><span class="mvx-physbadge">' + esc(badge) + "</span></div>";
+      esc(t.inst) + ", " + esc(t.city) + '</span><span class="mvx-physbadge">' + (badgeKind === "tier" ? zoneHtml(badge) : esc(badge)) + "</span></div>";
   }
   function physGroup(label, list, badgeKind, colorClass) {
     if (!list.length) return "";
@@ -989,6 +1324,8 @@ var TARGETS = [];
     var totalHit = targets.filter(function (t) { return t.quoted || t.pod; }).length;
     $("tac-secnote").textContent = totalHit + " of " + targets.length + " quoted or PO'd";
 
+    var tierLists = {};
+    var poTierSum = 0, hitSum = 0, nSum = 0;
     ["top32", "next21", "remaining26"].forEach(function (slug) {
       var list = byTier[slug];
       var pod = list.filter(function (t) { return t.pod; });
@@ -1017,6 +1354,8 @@ var TARGETS = [];
       }
       $("tier-foot-" + slug).innerHTML = "<span>" + hitCount + " quoted or PO'd</span><span" +
         (remaining.length > 0 ? ' class="mvx-flag"' : "") + ">" + remaining.length + " remaining</span>";
+      var poTierEl = $("po-tier-" + slug); if (poTierEl) poTierEl.textContent = pod.length;
+      poTierSum += pod.length; hitSum += hitCount; nSum += n;
       $("hstat-" + slug + "-pct").textContent = pctS;
       var hFill = $("hstat-" + slug + "-fill"), hPo = $("hstat-" + slug + "-po");
       hFill.style.width = blueW.toFixed(2) + "%";
@@ -1027,6 +1366,7 @@ var TARGETS = [];
       }
       $("hstat-" + slug + "-frac").textContent = hitCount + " / " + n + " quoted or PO'd";
 
+      tierLists[slug] = { pod: pod, quotedOnly: quotedOnly, remaining: remaining, n: n };
       var panel = $("tier-panel-" + slug);
       if (panel && panel.dataset.open === "1") {
         var html = physGroup("Quoted", quotedOnly, "territory", "mvx-quoted") +
@@ -1036,7 +1376,53 @@ var TARGETS = [];
         panel.innerHTML = html;
       }
     });
+    
+    if ($("hstat-total-hit")) {
+      var pc = function (x) { return (nSum ? x / nSum * 100 : 0).toFixed(1) + "%"; };
+      $("hstat-total-hit-pct").textContent = pc(hitSum);
+      $("hstat-total-hit").textContent = hitSum + " of " + nSum + " targets";
+      $("hstat-total-po-pct").textContent = pc(poTierSum);
+      $("hstat-total-po").textContent = poTierSum + " of " + nSum + " targets";
+    }
+    
+    var poOtherEl = $("po-tier-other");
+    if (poOtherEl && state.po) poOtherEl.textContent = Math.max(0, poNarwhal(state.po).length - poTierSum);
+        renderHeroPanel(tierLists);
   }
+
+  
+  var HERO_NAME = TIER_LABEL;
+  var heroOpen = null;
+  function renderHeroPanel(tierLists) {
+    var panel = $("hstat-panel");
+    if (!panel) return;
+    ["top32", "next21", "remaining26"].forEach(function (s) {
+      var t = $("hstat-" + s);
+      if (t) t.setAttribute("aria-expanded", s === heroOpen ? "true" : "false");
+    });
+    if (!heroOpen || !tierLists || !tierLists[heroOpen]) { panel.hidden = true; panel.innerHTML = ""; return; }
+    var L = tierLists[heroOpen];
+    var html = '<div class="mvx-stat-tierpanel-title"><span>' + zoneHtml(HERO_NAME[heroOpen]) + '</span><small>' +
+      (L.pod.length + L.quotedOnly.length) + " of " + L.n + " quoted or PO&rsquo;d</small></div>" +
+      physGroup("PO\u2019d", L.pod, "territory", "mvx-pod") +
+      physGroup("Quoted", L.quotedOnly, "territory", "mvx-quoted") +
+      physGroup("Not yet quoted or PO\u2019d", L.remaining, "territory", "mvx-notq");
+    if (!L.n) html += '<div class="mvx-tierpanel-empty">No accounts in this tier yet.</div>';
+    panel.innerHTML = html;
+    panel.hidden = false;
+  }
+  function toggleHero(slug) {
+    heroOpen = heroOpen === slug ? null : slug;
+    renderTierPanels();
+  }
+  ["top32", "next21", "remaining26"].forEach(function (slug) {
+    var tile = $("hstat-" + slug);
+    if (!tile) return;
+    tile.addEventListener("click", function () { toggleHero(slug); });
+    tile.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleHero(slug); }
+    });
+  });
 
   function toggleTier(slug) {
     var tile = $("tier-" + slug), panel = $("tier-panel-" + slug);
@@ -1105,12 +1491,229 @@ var TARGETS = [];
     if (state.quotes && state.quotes.last) t = Math.max(t, state.quotes.last);
     if (!t) return;
     var dt = new Date(t);
-    $("asof").innerHTML = MON[dt.getUTCMonth()] + "&nbsp;" + dt.getUTCDate() + ", " + dt.getUTCFullYear();
+    var label = MON[dt.getUTCMonth()] + "&nbsp;" + dt.getUTCDate() + ", " + dt.getUTCFullYear();
+    $("asof").innerHTML = label;
+    
+    var endEl = $("launch-end");
+    if (endEl) endEl.innerHTML = label;
   }
 
+  
+  
+  var PRO_KIT_PRICE = null, PRO_PACK_PRICE = null, PRO_GOAL = null, PRO_ALLOC = null;
+  function isProRow(r) { return !!(r && (r.proKits || r.proPacks)); }
+  function poNarwhal(rows) { return (rows || []).filter(function (r) { return !isProRow(r) || r.kits || r.carts; }); }
+  function poPro(rows) { return (rows || []).filter(isProRow); }
+  function pl(n, w) { return n + " " + w + (n === 1 ? "" : "s"); }
+  function proAccountKey(c) {
+    return String(c).toLowerCase().replace(/,\s*[a-z]{2}\s*$/, "").replace(/[^a-z0-9]+/g, " ")
+      .replace(/\b(the|hospital|hospitals|medical|center|centre|health|inc|llc)\b/g, " ").replace(/\s+/g, " ").trim();
+  }
+  function renderPro() {
+    if (!$("p-rev-num")) return;
+    var rows = poPro(state.po);
+    var q = (state.quotes && state.quotes.pro) || { total: 0, byTerritory: {}, mix: { only: 0, cart: 0, combo: 0 }, last: 0 };
+    var kits = 0, packs = 0, poByT = {}, unassigned = [];
+    rows.forEach(function (r) {
+      kits += r.proKits || 0; packs += r.proPacks || 0;
+      var t = poTerritory(r); if (t) poByT[t] = (poByT[t] || 0) + 1; else if (unassigned.indexOf(r.customer) === -1) unassigned.push(r.customer);
+    });
+    var priced = PRO_KIT_PRICE !== null && PRO_PACK_PRICE !== null;
+    var rev = kits * (PRO_KIT_PRICE || 0) + packs * (PRO_PACK_PRICE || 0);
+    $("p-rev-num").textContent = priced ? money(rev) : "TBD";
+    
+    $("p-rev-sub").innerHTML = pl(kits, "Pro kit") + (priced ? "" : " &middot; pricing TBD") + " &middot; cartridge 4-packs counted on the Narwhal tab";
+    var hasGoal = priced && PRO_GOAL !== null;
+    var pct = hasGoal ? rev / PRO_GOAL * 100 : 0;
+    $("p-rev-pct").textContent = hasGoal ? pct.toFixed(1) + "% of 2026 goal" : "Goal TBD";
+    $("p-rev-goalsub").textContent = hasGoal ? money(Math.max(0, PRO_GOAL - rev)) + " to go against the " + money(PRO_GOAL) + " goal" : "Pro revenue goal not set yet";
+    $("p-rev-fill").style.width = Math.max(0, Math.min(100, pct)) + "%";
+    $("p-rev-scale").textContent = hasGoal ? money(PRO_GOAL) + " goal" : "Goal TBD";
+
+    var active = 0; QUOTES.forEach(function (x) { if (q.byTerritory[x[0]]) active++; });
+    $("p-quotes-num").textContent = q.total;
+    $("p-quotes-sub").textContent = "Across " + active + " active " + (active === 1 ? "territory" : "territories");
+    $("p-po-num").innerHTML = rows.length + "<small>/ " + pl(kits, "kit") + "</small>";
+    $("p-po-sub").textContent = pl(kits, "Pro kit") + " ordered to date · cartridge 4-packs are counted on the Narwhal tab";
+    $("p-po-secnote").innerHTML = pl(rows.length, "PO") + " &middot; " + pl(kits, "kit");
+    $("p-terr-secnote").textContent = pl(q.total, "quote") + " + " + pl(rows.length, "PO");
+
+    var alloc = PRO_ALLOC ? (PRO_ALLOC.oct || 0) + (PRO_ALLOC.nov || 0) + (PRO_ALLOC.dec || 0) : null;
+    $("p-kits-rem-num").innerHTML = alloc === null ? '<span class="mvx-tbd">TBD</span>' : String(alloc - kits);
+    $("p-kits-rem-sub").textContent = alloc === null ? "Pro allocation TBD · " + pl(kits, "kit") + " on POs received" : alloc + " kits allocated against " + pl(kits, "kit") + " on POs received";
+    var realT = QUOTES.filter(function (x) { return x[0] !== "Other" && x[0] !== "Phoenix"; });
+    var nopo = realT.filter(function (x) { return !poByT[x[0]]; }).map(function (x) { return x[0]; });
+    $("p-nopo-num").innerHTML = nopo.length + "<small>/ " + realT.length + "</small>";
+    $("p-nopo-sub").textContent = nopo.join(", ");
+
+    
+    var counts = {};
+    rows.forEach(function (r) { var k = proAccountKey(r.customer); counts[k] = (counts[k] || 0) + 1; });
+    $("p-po-tbody").innerHTML = rows.length ? newestFirst(rows).map(function (r) {
+      var items = String(r.item || "").split(" + ").filter(function (x) { return PRO_ITEM.test(x); }).join(" + ");
+      var units = pl(r.proKits || 0, "kit") + (r.proPacks ? " + " + pl(r.proPacks, "pack") : "");
+      return '<tr><td class="meta">' + esc(fmtDate(r.date)) + '</td><td class="key">' + esc(r.customer) + "</td><td>" +
+        esc(poTerritory(r) || "Unassigned") + '</td><td class="tier' + (proTierOf(r.customer) === ZONE4_LABEL ? " other" : "") + '">' + zoneHtml(proTierOf(r.customer)) + '</td><td class="num">' +
+        (counts[proAccountKey(r.customer)] || 1) + '</td><td class="meta">' + esc(items) + '</td><td class="meta">' + esc(r.po) +
+        '</td><td class="qty">' + units + "</td></tr>";
+    }).join("") : '<tr><td class="meta" colspan="8">No Pro POs received yet.</td></tr>';
+
+    
+    var max = 1;
+    QUOTES.forEach(function (x) { max = Math.max(max, (q.byTerritory[x[0]] || 0) + (poByT[x[0]] || 0)); });
+    var sorted = QUOTES.slice().sort(function (a, b) {
+      return ((q.byTerritory[b[0]] || 0) + (poByT[b[0]] || 0)) - ((q.byTerritory[a[0]] || 0) + (poByT[a[0]] || 0));
+    });
+    var barHtml = sorted.map(function (x) {
+      var t = x[0], rep = x[1], quotes = q.byTerritory[t] || 0, p = poByT[t] || 0, tot = quotes + p;
+      if (!tot) return "";
+      var qw = quotes / max * 100, pw = p / max * 100;
+      return '<div class="mvx-bar-row" style="cursor:default" title="' + esc(rep + " — " + t + " — " + pl(quotes, "quote") + (p ? " + " + pl(p, "PO") : "")) + '">' +
+        '<div><div class="mvx-bar-territory">' + esc(t) + '</div><div class="mvx-bar-rep">' + esc(rep) + "</div></div>" +
+        '<div class="mvx-bar-track"><div class="mvx-bar-fill" style="width:' + qw.toFixed(2) + "%" + (p ? "; border-radius:4px 0 0 4px" : "") + '"></div>' +
+        (p ? '<div class="mvx-bar-po" style="left:' + qw.toFixed(2) + "%; width:" + pw.toFixed(2) + '%"></div>' : "") + "</div>" +
+        '<div class="mvx-bar-value">' + tot + (p ? "<span>" + quotes + "+" + p + "</span>" : "") + "</div></div>";
+    }).join("");
+    $("p-terr-bars").innerHTML = barHtml || '<div class="mvx-tierpanel-empty">No Pro quotes logged yet.</div>';
+    var gap = realT.filter(function (x) { return !poByT[x[0]]; });
+    $("p-terr-gapnote").innerHTML = "<span>No Pro POs yet:</span>" + gap.map(function (x) {
+      return '<span class="mvx-chip">' + esc(x[0]) + " &middot; " + esc(x[1]) + "</span>";
+    }).join("") + (unassigned.length ? '<span class="mvx-chip warnchip">Account not mapped: ' + esc(unassigned.join(", ")) + "</span>" : "");
+
+    
+    var byM = { 9: 0, 10: 0, 11: 0 };
+    rows.forEach(function (r) { var d = rowDate(r.date); if (d === null) return; var m = new Date(d).getUTCMonth(); if (byM[m] !== undefined) byM[m] += r.proKits || 0; });
+    function cellv(v) { return '<td class="num">' + v + "</td>"; }
+    function tbd() { return '<span class="mvx-tbd">TBD</span>'; }
+    var A = PRO_ALLOC;
+    $("p-inv-body").innerHTML =
+      '<tr><td class="key">Kits Allocated</td>' + cellv(A ? A.oct : tbd()) + cellv(A ? A.nov : tbd()) + cellv(A ? A.dec : tbd()) + '<td class="num tot">' + (A ? alloc : tbd()) + "</td></tr>" +
+      '<tr><td class="key">Kits on POs Received</td>' + cellv(byM[9]) + cellv(byM[10]) + cellv(byM[11]) + '<td class="num tot">' + kits + "</td></tr>" +
+      '<tr><td class="key">Kits Remaining</td>' + cellv(A ? A.oct - byM[9] : tbd()) + cellv(A ? A.nov - byM[10] : tbd()) + cellv(A ? A.dec - byM[11] : tbd()) +
+      '<td class="num tot">' + (A ? alloc - kits : tbd()) + "</td></tr>";
+
+    
+    var C = 452.39, segs = [["only", "#F26A3D", "Pro only"], ["cart", "#3494BA", "Pro &amp; Cartridges"], ["combo", "#A4A6A8", "Pro + Narwhal"]];
+    var off = 0, arcs = "", legend = "";
+    segs.forEach(function (sg) {
+      var n = q.mix[sg[0]] || 0, pv = q.total ? n / q.total * 100 : 0, len = C * (pv / 100);
+      arcs += '<circle cx="90" cy="90" r="72" fill="none" stroke="' + sg[1] + '" stroke-width="20" stroke-dasharray="' + len.toFixed(2) + " " + C +
+        '" stroke-dashoffset="' + (-off).toFixed(2) + '"><title>' + sg[2] + " — " + n + " quotes (" + pv.toFixed(1) + "%)</title></circle>";
+      legend += '<div class="mvx-legendrow"><span class="mvx-swatch" style="background:' + sg[1] + '"></span><span class="mvx-legendname">' + sg[2] +
+        '</span><span class="mvx-legendval">' + n + " &middot; " + pv.toFixed(1) + "%</span></div>";
+      off += len;
+    });
+    $("p-donut-arcs").innerHTML = arcs;
+    $("p-mix-legend").innerHTML = legend;
+    $("p-donut-total").textContent = q.total;
+    $("p-mix-desc").textContent = "Share of the " + q.total + " logged Pro quotes by configuration.";
+    renderProTargets(rows, q);
+  }
+
+  
+  function proTierOf(customer) {
+    var rank = { top32: 0, next21: 1, remaining26: 2 }, best = null;
+    matchTargets(customer).forEach(function (t) { var k = tierSlug(t.type); if (best === null || rank[k] < rank[best]) best = k; });
+    return best ? TIER_LABEL[best] : ZONE4_LABEL;
+  }
+  function computeProCoverage(rows, q) {
+    var targets = buildTargets().map(function (t) {
+      return { phys: t.phys, inst: t.inst, city: t.city, territory: t.territory, type: t.type, quoted: false, pod: false, _src: t };
+    });
+    var bySrc = function (src) { for (var i = 0; i < targets.length; i++) if (targets[i]._src === src) return targets[i]; return null; };
+    (rows || []).forEach(function (r) { matchTargets(r.customer).forEach(function (t) { var c = bySrc(t); if (c) c.pod = true; }); });
+    ((q && q.facilities) || []).forEach(function (f) { matchTargets(f).forEach(function (t) { var c = bySrc(t); if (c) c.quoted = true; }); });
+    return targets;
+  }
+  var proHeroOpen = null, proTierLists = null;
+  function renderProTargets(rows, q) {
+    if (!$("p-hstat-top32")) return;
+    var targets = computeProCoverage(rows, q);
+    var byTier = { top32: [], next21: [], remaining26: [] };
+    targets.forEach(function (t) { var k = tierSlug(t.type); if (byTier[k]) byTier[k].push(t); });
+    var totalHit = targets.filter(function (t) { return t.quoted || t.pod; }).length;
+    var sn = $("p-tac-secnote"); if (sn) sn.textContent = totalHit + " of " + targets.length + " quoted or PO'd";
+    var lists = {}, poSum = 0;
+    ["top32", "next21", "remaining26"].forEach(function (slug) {
+      var list = byTier[slug], n = list.length;
+      var pod = list.filter(function (t) { return t.pod; });
+      var quotedOnly = list.filter(function (t) { return t.quoted && !t.pod; });
+      var remaining = list.filter(function (t) { return !t.quoted && !t.pod; });
+      var hit = pod.length + quotedOnly.length, pctS = (n ? hit / n * 100 : 0).toFixed(1) + "%";
+      var blueW = n ? quotedOnly.length / n * 100 : 0, orangeW = n ? pod.length / n * 100 : 0;
+      function bar(fill, po, r) {
+        if (fill) { fill.style.width = blueW.toFixed(2) + "%"; fill.style.borderRadius = orangeW > 0 ? r + " 0 0 " + r : ""; }
+        if (po) { if (orangeW > 0) { po.style.display = ""; po.style.left = blueW.toFixed(2) + "%"; po.style.width = orangeW.toFixed(2) + "%"; } else po.style.display = "none"; }
+      }
+      $("p-hstat-" + slug + "-pct").textContent = pctS;
+      bar($("p-hstat-" + slug + "-fill"), $("p-hstat-" + slug + "-po"), "3px");
+      $("p-hstat-" + slug + "-frac").textContent = hit + " / " + n + " quoted or PO'd";
+      var tp = $("p-tier-pct-" + slug); if (tp) tp.textContent = pctS;
+      bar($("p-tier-fill-" + slug), $("p-tier-po-" + slug), "4px");
+      var tf = $("p-tier-foot-" + slug);
+      if (tf) tf.innerHTML = "<span>" + hit + " quoted or PO'd</span><span" + (remaining.length ? ' class="mvx-flag"' : "") + ">" + remaining.length + " remaining</span>";
+      var pt = $("p-po-tier-" + slug); if (pt) pt.textContent = pod.length;
+      poSum += pod.length;
+      lists[slug] = { pod: pod, quotedOnly: quotedOnly, remaining: remaining, n: n };
+    });
+    var po4 = $("p-po-tier-other"); if (po4) po4.textContent = Math.max(0, (rows || []).length - poSum);
+    proTierLists = lists;
+    renderProHeroPanel();
+  }
+  function renderProHeroPanel() {
+    var panel = $("p-hstat-panel"); if (!panel) return;
+    ["top32", "next21", "remaining26"].forEach(function (s) {
+      var t = $("p-hstat-" + s); if (t) t.setAttribute("aria-expanded", s === proHeroOpen ? "true" : "false");
+    });
+    if (!proHeroOpen || !proTierLists || !proTierLists[proHeroOpen]) { panel.hidden = true; panel.innerHTML = ""; return; }
+    var L = proTierLists[proHeroOpen];
+    var html = '<div class="mvx-stat-tierpanel-title"><span>' + zoneHtml(TIER_LABEL[proHeroOpen]) + '</span><small>' +
+      (L.pod.length + L.quotedOnly.length) + " of " + L.n + " quoted or PO&rsquo;d</small></div>" +
+      physGroup("PO\u2019d", L.pod, "territory", "mvx-pod") +
+      physGroup("Quoted", L.quotedOnly, "territory", "mvx-quoted") +
+      physGroup("Not yet quoted or PO\u2019d", L.remaining, "territory", "mvx-notq");
+    if (!L.n) html += '<div class="mvx-tierpanel-empty">No accounts in this tier yet.</div>';
+    panel.innerHTML = html;
+    panel.hidden = false;
+  }
+  ["top32", "next21", "remaining26"].forEach(function (slug) {
+    var tile = $("p-hstat-" + slug);
+    if (!tile) return;
+    function tog() { proHeroOpen = proHeroOpen === slug ? null : slug; renderProHeroPanel(); }
+    tile.addEventListener("click", tog);
+    tile.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tog(); } });
+  });
+
+  
+  function showTab(name) {
+    ["narwhal", "pro"].forEach(function (n) {
+      var panel = $("tab-" + n), btn = $("tabbtn-" + n);
+      if (panel) panel.hidden = n !== name;
+      if (btn) btn.setAttribute("aria-selected", n === name ? "true" : "false");
+    });
+    try { if (window.history && history.replaceState) history.replaceState(null, "", name === "pro" ? "#pro" : "#narwhal"); } catch (e) {}
+    fitPoTables();
+  }
+  ["narwhal", "pro"].forEach(function (n) {
+    var btn = $("tabbtn-" + n);
+    if (btn) btn.addEventListener("click", function () { showTab(n); });
+  });
+  var tabbtns = [$("tabbtn-narwhal"), $("tabbtn-pro")];
+  tabbtns.forEach(function (btn, i) {
+    if (!btn) return;
+    btn.addEventListener("keydown", function (e) {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      var j = (i + (e.key === "ArrowRight" ? 1 : tabbtns.length - 1)) % tabbtns.length;
+      tabbtns[j].focus(); showTab(j === 1 ? "pro" : "narwhal");
+    });
+  });
+  try { if (/pro/i.test(location.hash)) showTab("pro"); } catch (e) {}
+
   function renderAll() {
+    setTimeout(fitPoTables, 0);
     renderQuotes();
-    if (state.po) render(state.po);
+    if (state.po) render(poNarwhal(state.po));
+    renderPro();
     renderTierPanels();
     asOf();
   }
@@ -1175,7 +1778,7 @@ var TARGETS = [];
     try { q = parseQuotes(toCsv(p.quotes || [])); } catch (e) { q = null; }
     state.quotes = q;
 
-    $("rev-scale").innerHTML = "<span>$0</span><span>" + money(GOAL) + " goal</span>";
+    $("rev-scale").innerHTML = "<span>0 kits</span><span>" + ALLOC_TOTAL + "-kit goal</span>";
     if (!state.po) renderInventory(0);
     renderAll();
   }
