@@ -371,8 +371,12 @@ body:not(.locked) #gate{display:none}
 .mvx-gate-btn:hover{background:var(--accent-press)}
 .mvx-gate-btn:disabled{opacity:.6; cursor:default}
 .mvx-gate-msg{min-height:1.2em; margin:.2rem 0 0; font-size:.82rem; color:var(--text-muted)}
-.mvx-signout{color:inherit; opacity:.75; text-decoration:underline; text-underline-offset:2px}
-.mvx-signout:hover{opacity:1}
+/* header top row: eyebrow left, Sign out right */
+.mvx-topbar{flex:1 1 100%; display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-bottom:-.5rem}
+.mvx-topbar .mvx-eyebrow{margin:0}
+.mvx-signout{font-family:var(--font-display); font-size:.78rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:#fff; text-decoration:none; padding:.35rem .8rem; border:1px solid rgba(255,255,255,.55); border-radius:999px; white-space:nowrap}
+.mvx-signout:hover{background:rgba(255,255,255,.14); border-color:#fff}
+.mvx-signout:focus-visible{outline:2px solid #fff; outline-offset:2px}
 /* Returning visitor with a saved session: show "Loading" instead of the password form until the
    data service answers. If the session has expired, the form comes back. */
 .mvx-gate-resume{display:none; margin:0; font-size:.95rem; color:var(--text-secondary)}
@@ -438,15 +442,14 @@ img, svg{max-width:100%}
 
 <header class="mvx-masthead">
   <div class="mvx-inner">
+    <div class="mvx-topbar"><p class="mvx-eyebrow">Maverix Medical &middot; Sales Operations</p><a href="#" id="signout" class="mvx-signout">Sign out</a></div>
     <div class="mvx-masthead-copy">
-      <p class="mvx-eyebrow">Maverix Medical &middot; Sales Operations</p>
       <h1>Narwhal/<wbr>Narwhal Pro Launch Tracker</h1>
       <p class="mvx-tagline">Quote pipeline, target-account coverage, and kit inventory for the Narwhal cryobiopsy launch.</p>
       <div class="mvx-mastmeta">
         <span>Launch window <strong>Aug&nbsp;18&ndash;<span id="launch-end"></span></strong></span>
         <span>Data as of <strong id="asof"></strong></span>
         <span id="sync-note" class="mvx-live off">Signed out</span>
-        <a href="#" id="signout" class="mvx-signout">Sign out</a>
       </div>
     </div>
     <div class="mvx-hero-media">
