@@ -614,7 +614,7 @@ img, svg{max-width:100%}
     <p class="mvx-secdesc" id="mix-desc"></p>
     <div class="mvx-donut-wrap">
       <div class="mvx-donut">
-        <svg id="donut-svg" viewBox="0 0 180 180" role="img" aria-label="Quote configuration mix across 209 quotes">
+        <svg id="donut-svg" viewBox="0 0 180 180" role="img" aria-label="Quote configuration mix across 215 quotes">
           <circle cx="90" cy="90" r="72" fill="none" stroke="#E8EAEE" stroke-width="20"></circle>
           <g id="donut-arcs"></g>
         </svg>
@@ -746,17 +746,17 @@ img, svg{max-width:100%}
     <div class="mvx-tiers">
       <div class="mvx-tier mvx-tier--static">
         <div class="mvx-tier-head"><span class="mvx-tier-name"><span class="zn">Zone 1</span><span class="zr">/<wbr>Top 32</span></span><span class="mvx-tier-pct" id="p-tier-pct-top32"></span></div>
-        <div class="mvx-tier-track"><div class="mvx-tier-fill" id="p-tier-fill-top32" style="width: 31.25%; border-radius: 4px 0px 0px 4px;"></div><div class="mvx-tier-po" id="p-tier-po-top32" style="left: 31.25%; width: 3.13%;"></div></div>
+        <div class="mvx-tier-track"><div class="mvx-tier-fill" id="p-tier-fill-top32" style="width: 31.25%; border-radius: 4px 0px 0px 4px;"></div><div class="mvx-tier-po" id="p-tier-po-top32" style="left: 31.25%; width: 9.38%;"></div></div>
         <div class="mvx-tier-foot" id="p-tier-foot-top32"></div>
       </div>
       <div class="mvx-tier mvx-tier--static">
         <div class="mvx-tier-head"><span class="mvx-tier-name"><span class="zn">Zone 2</span><span class="zr">/<wbr>Next 21</span></span><span class="mvx-tier-pct" id="p-tier-pct-next21"></span></div>
-        <div class="mvx-tier-track"><div class="mvx-tier-fill" id="p-tier-fill-next21" style="width: 19.05%;"></div><div class="mvx-tier-po" id="p-tier-po-next21" style="display:none"></div></div>
+        <div class="mvx-tier-track"><div class="mvx-tier-fill" id="p-tier-fill-next21" style="width: 23.81%;"></div><div class="mvx-tier-po" id="p-tier-po-next21" style="display:none"></div></div>
         <div class="mvx-tier-foot" id="p-tier-foot-next21"></div>
       </div>
       <div class="mvx-tier mvx-tier--static">
         <div class="mvx-tier-head"><span class="mvx-tier-name"><span class="zn">Zone 3</span><span class="zr">/<wbr>Remaining 26</span></span><span class="mvx-tier-pct" id="p-tier-pct-remaining26"></span></div>
-        <div class="mvx-tier-track"><div class="mvx-tier-fill" id="p-tier-fill-remaining26" style="width: 26.92%; border-radius: 4px 0px 0px 4px;"></div><div class="mvx-tier-po" id="p-tier-po-remaining26" style="left: 26.92%; width: 3.85%;"></div></div>
+        <div class="mvx-tier-track"><div class="mvx-tier-fill" id="p-tier-fill-remaining26" style="width: 30.77%; border-radius: 4px 0px 0px 4px;"></div><div class="mvx-tier-po" id="p-tier-po-remaining26" style="left: 30.77%; width: 3.85%;"></div></div>
         <div class="mvx-tier-foot" id="p-tier-foot-remaining26"></div>
       </div>
     </div>
@@ -880,6 +880,8 @@ var TARGETS = [];
       else if (/\bpo\b|po ?#/.test(v) && (m.po === undefined || m.poIsOrder)) { if (m.po === undefined) seen++; m.po = i; m.poIsOrder = false; }
       else if (m.po === undefined && /order/.test(v)) { m.po = i; m.poIsOrder = true; seen++; }
       else if (m.item === undefined && /item|product|sku|part/.test(v)) { m.item = i; seen++; }
+      else if (/qty|quantity|units/.test(v) && /\bpro\b/.test(v)) { m.qtyPro = i; }
+      else if (/qty|quantity|units/.test(v) && /cartridge|cart\b|\bcc\b/.test(v)) { m.qtyCart = i; }
       else if (m.qty === undefined && /qty|quantity|units/.test(v)) { m.qty = i; seen++; }
       else if (m.terr === undefined && /territor|region/.test(v)) { m.terr = i; }
     });
@@ -915,6 +917,12 @@ var TARGETS = [];
       var items = String(cells[col.item] || "").split(/\s+/).filter(Boolean);
       var qtys = String(cells[col.qty] || "").split(/\s+/).filter(Boolean);
       var kits = 0, carts = 0, proKits = 0, proPacks = 0;
+      
+      if (col.qtyPro !== undefined || col.qtyCart !== undefined) {
+        var num = function (k) { var t = 0; String(k === undefined ? "" : cells[k] || "").split(/\s+/).forEach(function (x) { var n = parseInt(x, 10); if (!isNaN(n)) t += n; }); return t; };
+        kits = num(col.qty); proKits = num(col.qtyPro); carts = num(col.qtyCart);
+        items = items.filter(function (x) { return /^(MCB|NWL|CC)/i.test(x); });
+      } else
       for (var j = 0; j < items.length; j++) {
         var q = parseInt(qtys[j], 10); if (isNaN(q)) q = j === 0 ? parseInt(qtys[0], 10) || 0 : 0;
         
@@ -937,7 +945,10 @@ var TARGETS = [];
   function rebuildReps() {
     REP_TERRITORY = {};
     QUOTES.forEach(function (q) { REP_TERRITORY[q[1].toLowerCase()] = q[0]; });
+    REP_ALIAS.forEach(function (a) { REP_TERRITORY[a[0]] = a[1]; });
   }
+  
+  var REP_ALIAS = [];
   var state = { po: null, quotes: null };
 
   function parseCsv(text) {
@@ -962,12 +973,14 @@ var TARGETS = [];
     try { return new TextDecoder("utf-8").decode(bytes); } catch (e) { return bin; }
   }
   function rowDate(s) {
-    var m = /^\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s*$/.exec(s || "");
+    s = String(s || "").replace(/\/{2,}/g, "/");
+    s = s.replace(/^\s*(\d{1,2})\/(\d{2})(\d{2})\s*$/, "$1/$2/$3");
+    var m = /^\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s*$/.exec(s);
     if (!m) return null;
     var y = +m[3]; if (y < 100) y += 2000;
     return Date.UTC(y, +m[1] - 1, +m[2]);
   }
-  var NARWHAL = /n\s*a\s*r\s*w\s*[ah]{0,2}\s*l|cryobiops|MCB-?100?0|NWL-?1000|CC-?1000/i;
+  var NARWHAL = /n\s*a\s*r\s*h?\s*w\s*[ah]{0,2}\s*l|cryobiops|MCB-?100?0|NWL-?1000|CC-?1000/i;
   var OTHER_PRODUCT = /bonastent|hilzo|ebus|y ?stent|forceps|netis|serpex|needle|straight stent|retrieval net|\bTT8|\bBU4|\bEVP|\bMED-/i;
   function quoteConfig(p) {
     if (OTHER_PRODUCT.test(p)) return "other";
@@ -975,11 +988,13 @@ var TARGETS = [];
     return "only";
   }
   
-  var NARWHAL_PRO_NAME = /n\s*a\s*r\s*w\s*[ah]{0,2}\s*l\w*\s*pro\b/gi;
+  var NARWHAL_PRO_NAME = /n\s*a\s*r\s*h?\s*w\s*[ah]{0,2}\s*l\w*\s*pro\b/gi;
   function proSplit(prod) {
-    var proMention = /\bpro\b/i.test(prod) || PRO_CODE.test(prod);
+    
+    var all = NARWHAL.test(prod) && /\ball\b/i.test(prod);
+    var proMention = all || /\bpro\b/i.test(prod) || PRO_CODE.test(prod);
     var stripped = prod.replace(NARWHAL_PRO_NAME, " ").replace(/(MCBP|NWL-?2\d{3})\S*/gi, " ");
-    var narwhal = NARWHAL.test(stripped);
+    var narwhal = all || NARWHAL.test(stripped);
     var pro = proMention && (NARWHAL.test(prod) || PRO_CODE.test(prod));
     return { pro: pro, narwhal: narwhal, stripped: stripped };
   }
@@ -988,7 +1003,15 @@ var TARGETS = [];
       pro: { total: 0, byTerritory: {}, mix: { only: 0, cart: 0, combo: 0 }, facilities: [], last: 0 } };
     for (var i = 1; i < rows.length; i++) {
       var r = rows[i]; if (!r || r.length < 4) continue;
-      var d = rowDate(r[0]); if (d === null || d < WINDOW_START) continue;
+      var d = rowDate(r[0]);
+      if (d === null && String(r[0] || "").trim()) {
+        
+        var prev = null, next = null, k;
+        for (k = i - 1; k > 0 && prev === null; k--) prev = rows[k] ? rowDate(rows[k][0]) : null;
+        for (k = i + 1; k < rows.length && next === null; k++) next = rows[k] ? rowDate(rows[k][0]) : null;
+        if (prev !== null && prev === next) d = prev;
+      }
+      if (d === null || d < WINDOW_START) continue;
       var prod = r[3] || ""; if (!NARWHAL.test(prod) && !PRO_CODE.test(prod)) continue;
       var sp = proSplit(prod);
       var t = REP_TERRITORY[String(r[1] || "").trim().toLowerCase()];
@@ -1042,27 +1065,32 @@ var TARGETS = [];
     if (svg) svg.setAttribute("aria-label", "Quote configuration mix across " + q.total + " quotes");
   }
 
-  function renderInventory(kits) {
+  function renderInventory(kits, rows) {
     function cell(w, v, cls) { return '<span class="mvx-cellbar ' + cls + '" style="width:' + w.toFixed(1) + '%"></span><span class="mvx-celltext">' + v + "</span>"; }
-    var a = ALLOC, octRemain = ALLOC_OCT - kits, remain = ALLOC_TOTAL - kits;
+    var a = ALLOC, byM = [0, 0, 0], remain = ALLOC_TOTAL - kits;
+    (rows || []).forEach(function (r) {
+      var d = rowDate(r.date); if (d === null) return;
+      var dt = new Date(d), m = dt.getUTCFullYear() > 2026 ? 2 : dt.getUTCMonth();
+      byM[m <= 9 ? 0 : m === 10 ? 1 : 2] += r.kits;
+    });
     var alloc = a.map(function (v) { return '<td class="num">' + cell(v / MAXMONTH * 100, v, "") + "</td>"; }).join("");
+    var onPo = byM.map(function (v) { return '<td class="num">' + (v ? cell(v / MAXMONTH * 100, v, "warm") : "0") + "</td>"; }).join("");
+    var left = a.map(function (v, i) { var l = v - byM[i]; return '<td class="num">' + cell(Math.max(0, l) / MAXMONTH * 100, l, "") + "</td>"; }).join("");
     $("inv-tbody").innerHTML =
       '<tr><td class="key">Kits Allocated</td>' + alloc + '<td class="num tot">' + cell(80, ALLOC_TOTAL, "tot") + "</td></tr>" +
-      '<tr><td class="key">Kits on POs Received</td><td class="num">' + cell(kits / MAXMONTH * 100, kits, "warm") + '</td><td class="num">0</td><td class="num">0</td>' +
-        '<td class="num tot">' + cell(ALLOC_TOTAL ? kits / ALLOC_TOTAL * 80 : 0, kits, "warm") + "</td></tr>" +
-      '<tr><td class="key">Kits Remaining</td><td class="num">' + cell(Math.max(0, octRemain) / MAXMONTH * 100, octRemain, "") + "</td>" +
-        a.slice(1).map(function (v) { return '<td class="num">' + cell(v / MAXMONTH * 100, v, "") + "</td>"; }).join("") +
-        '<td class="num tot">' + cell(ALLOC_TOTAL ? Math.max(0, remain) / ALLOC_TOTAL * 80 : 0, remain, "tot") + "</td></tr>";
+      '<tr><td class="key">Kits on POs Received</td>' + onPo + '<td class="num tot">' + cell(ALLOC_TOTAL ? kits / ALLOC_TOTAL * 80 : 0, kits, "warm") + "</td></tr>" +
+      '<tr><td class="key">Kits Remaining</td>' + left + '<td class="num tot">' + cell(ALLOC_TOTAL ? Math.max(0, remain) / ALLOC_TOTAL * 80 : 0, remain, "tot") + "</td></tr>";
   }
 
   function render(rows) {
     if (!rows.length) return false;
     var kits = 0, carts = 0, poByT = {}, unassigned = [];
     rows.forEach(function (r) {
-      kits += r.kits; carts += r.carts;
+      kits += r.kits;
       var t = poTerritory(r);
       if (t) poByT[t] = (poByT[t] || 0) + 1; else if (unassigned.indexOf(r.customer) === -1) unassigned.push(r.customer);
     });
+    (state.po || rows).forEach(function (r) { carts += r.carts || 0; });
     
     var rev = kits * KIT + carts * CART, pct = kits / ALLOC_TOTAL * 100;
     var remain = ALLOC_TOTAL - kits, octRemain = ALLOC_OCT - kits;
@@ -1102,7 +1130,7 @@ var TARGETS = [];
         '</td><td class="qty">' + qty + "</td></tr>";
     }).join("");
 
-    renderInventory(kits);
+    renderInventory(kits, rows);
 
     var max = 1;
     QUOTES.forEach(function (q) { max = Math.max(max, quotesFor(q[0]) + (poByT[q[0]] || 0)); });
@@ -1118,13 +1146,13 @@ var TARGETS = [];
         '<div class="mvx-bar-value">' + tot + (p ? "<span>" + quotes + "+" + p + "</span>" : "") + "</div></div>";
     }).join("");
 
-    var gap = QUOTES.filter(function (q) { return !poByT[q[0]] && q[0] !== "Phoenix" && q[0] !== "Other"; });
+    var gap = QUOTES.filter(function (q) { return !poByT[q[0]] && q[0] !== "Other"; });
     $("terr-gapnote").innerHTML = "<span>No POs yet:</span>" +
       gap.map(function (q) { return '<span class="mvx-chip">' + esc(q[0]) + " &middot; " + esc(q[1]) + "</span>"; }).join("") +
       (unassigned.length ? '<span class="mvx-chip warnchip">Account not mapped: ' + esc(unassigned.join(", ")) + "</span>" : "") +
       (state.quotes && state.quotes.unmapped.length ? '<span class="mvx-chip warnchip">Rep not mapped: ' + esc(state.quotes.unmapped.join(", ")) + "</span>" : "");
 
-    var realT = QUOTES.filter(function (q) { return q[0] !== "Other" && q[0] !== "Phoenix"; });
+    var realT = QUOTES.filter(function (q) { return q[0] !== "Other"; });
     var nopo = realT.filter(function (q) { return !poByT[q[0]]; }).map(function (q) { return q[0]; });
     if ($("nopo-num")) {
       $("nopo-num").innerHTML = nopo.length + "<small>/ " + realT.length + "</small>";
@@ -1505,7 +1533,7 @@ var TARGETS = [];
   function asOf() {
     var t = 0;
     if (state.po && state.po.length) {
-      var d = rowDate(state.po[state.po.length - 1].date); if (d) t = Math.max(t, d);
+      state.po.forEach(function (r) { var d = rowDate(r.date); if (d) t = Math.max(t, d); });
     }
     if (state.quotes && state.quotes.last) t = Math.max(t, state.quotes.last);
     if (!t) return;
@@ -1521,7 +1549,8 @@ var TARGETS = [];
   
   var PRO_KIT_PRICE = null, PRO_PACK_PRICE = null, PRO_GOAL = null, PRO_ALLOC = null;
   function isProRow(r) { return !!(r && (r.proKits || r.proPacks)); }
-  function poNarwhal(rows) { return (rows || []).filter(function (r) { return !isProRow(r) || r.kits || r.carts; }); }
+  
+  function poNarwhal(rows) { return (rows || []).filter(function (r) { return r.kits > 0; }); }
   function poPro(rows) { return (rows || []).filter(isProRow); }
   function pl(n, w) { return n + " " + w + (n === 1 ? "" : "s"); }
   function proAccountKey(c) {
@@ -1560,7 +1589,7 @@ var TARGETS = [];
     var alloc = PRO_ALLOC ? (PRO_ALLOC.oct || 0) + (PRO_ALLOC.nov || 0) + (PRO_ALLOC.dec || 0) : null;
     $("p-kits-rem-num").innerHTML = alloc === null ? '<span class="mvx-tbd">TBD</span>' : String(alloc - kits);
     $("p-kits-rem-sub").textContent = alloc === null ? "Pro allocation TBD · " + pl(kits, "kit") + " on POs received" : alloc + " kits allocated against " + pl(kits, "kit") + " on POs received";
-    var realT = QUOTES.filter(function (x) { return x[0] !== "Other" && x[0] !== "Phoenix"; });
+    var realT = QUOTES.filter(function (x) { return x[0] !== "Other"; });
     var nopo = realT.filter(function (x) { return !poByT[x[0]]; }).map(function (x) { return x[0]; });
     $("p-nopo-num").innerHTML = nopo.length + "<small>/ " + realT.length + "</small>";
     $("p-nopo-sub").textContent = nopo.join(", ");
@@ -1789,6 +1818,7 @@ var TARGETS = [];
     ACCOUNTS = p.accounts || [];
     TARGETS = p.targets || [];
     TARGET_OBJS = null;
+    REP_ALIAS = cfg.repAlias || [];
     rebuildReps();
 
     var po = [];
