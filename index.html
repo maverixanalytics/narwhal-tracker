@@ -373,6 +373,15 @@ body:not(.locked) #gate{display:none}
 .mvx-gate-msg{min-height:1.2em; margin:.2rem 0 0; font-size:.82rem; color:var(--text-muted)}
 .mvx-signout{color:inherit; opacity:.75; text-decoration:underline; text-underline-offset:2px}
 .mvx-signout:hover{opacity:1}
+/* Returning visitor with a saved session: show "Loading" instead of the password form until the
+   data service answers. If the session has expired, the form comes back. */
+.mvx-gate-resume{display:none; margin:0; font-size:.95rem; color:var(--text-secondary)}
+body.resuming .mvx-gate-resume{display:block}
+body.resuming .mvx-gate-label, body.resuming .mvx-gate-input, body.resuming .mvx-gate-btn, body.resuming .mvx-gate-msg{display:none}
+.mvx-gate-trust{display:grid; grid-template-columns:auto 1fr; column-gap:.5rem; align-items:center; margin-top:.35rem; font-size:.86rem; color:var(--text-body); cursor:pointer}
+.mvx-gate-trust input{width:16px; height:16px; margin:0; accent-color:var(--accent)}
+.mvx-gate-trust span{grid-column:2; font-size:.74rem; color:var(--text-muted)}
+body.resuming .mvx-gate-trust{display:none}
 
 /* ---------- phone fit (site only; carried over from the Sep 28 "Mobile layout fixes" commit, adapted to the 8-column PO tables) ---------- */
 html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
@@ -411,13 +420,16 @@ img, svg{max-width:100%}
 </style>
 </head>
 <body class="locked">
+<script>try{if(localStorage.getItem("narwhal-tracker.token"))document.body.classList.add("resuming")}catch(e){}</script>
 <div id="gate" class="mvx-gate">
   <form id="gate-form" class="mvx-gate-card" autocomplete="on">
     <p class="mvx-eyebrow">Maverix Medical &middot; Sales Operations</p>
     <h1 class="mvx-gate-title">Narwhal Launch Tracker</h1>
+    <p class="mvx-gate-resume" aria-live="polite">Loading the tracker…</p>
     <input type="text" name="username" value="narwhal-tracker" autocomplete="username" hidden>
     <label for="gate-pw" class="mvx-gate-label">Password</label>
     <input id="gate-pw" name="password" type="password" class="mvx-gate-input" autocomplete="current-password" required>
+    <label class="mvx-gate-trust"><input type="checkbox" id="gate-trust"> Trust this device<span>Stay signed in here. Don't use on a shared computer.</span></label>
     <button id="gate-btn" type="submit" class="mvx-gate-btn">Sign in</button>
     <p id="gate-msg" class="mvx-gate-msg" role="alert" aria-live="polite"></p>
   </form>
@@ -1785,11 +1797,14 @@ var TARGETS = [];
 
   function gateMsg(t) { $("gate-msg").textContent = t || ""; }
   function lock(msg) {
+    document.body.classList.remove("resuming");
     document.body.classList.add("locked");
     gateMsg(msg);
     var pw = $("gate-pw"); pw.value = ""; setTimeout(function () { try { pw.focus(); } catch (e) {} }, 0);
   }
-  function unlock() { document.body.classList.remove("locked"); }
+  function unlock() { document.body.classList.remove("locked", "resuming"); }
+  
+  function showForm() { document.body.classList.remove("resuming"); }
 
   
   function toMd(rows) {
@@ -1844,9 +1859,10 @@ var TARGETS = [];
       if (!res || !res.ok) {
         if (res && res.error === "auth") { setToken(null); lock("Your session has ended. Please sign in again."); return; }
         note("stale", "Couldn't load the sheets" + (res && res.message ? ": " + res.message : ""));
-        if (document.body.classList.contains("locked")) gateMsg("Signed in, but the sheets couldn't be read. Try again shortly.");
+        if (document.body.classList.contains("locked")) { showForm(); gateMsg("Signed in, but the sheets couldn't be read. Try again shortly."); }
         return;
       }
+      if (res.token) setToken(res.token);
       applyPayload(res);
       unlock();
       lastLoad = Date.now();
@@ -1855,7 +1871,7 @@ var TARGETS = [];
     }).catch(function () {
       loading = false;
       note("stale", "Couldn't reach the data service — will retry");
-      if (document.body.classList.contains("locked")) gateMsg("Couldn't reach the data service. Check your connection and try again.");
+      if (document.body.classList.contains("locked")) { showForm(); gateMsg("Couldn't reach the data service. Check your connection and try again."); }
     });
   }
 
@@ -1867,7 +1883,8 @@ var TARGETS = [];
     var btn = $("gate-btn");
     btn.disabled = true;
     gateMsg("Signing in…");
-    call({ action: "login", password: pw }).then(function (res) {
+    var trust = !!($("gate-trust") && $("gate-trust").checked);
+    call({ action: "login", password: pw, trust: trust }).then(function (res) {
       btn.disabled = false;
       if (res && res.ok && res.token) { setToken(res.token); gateMsg("Loading…"); load(); return; }
       var err = res && res.error;
