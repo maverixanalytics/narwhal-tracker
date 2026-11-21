@@ -765,21 +765,6 @@ img, svg{max-width:100%}
 
 <section class="mvx-band row-line">
   <div class="mvx-container">
-    <h2 class="mvx-seclabel">Pro Kit Inventory, Q4 2026</h2>
-    <p class="mvx-secdesc">Planned Pro kit allocation against Pro kits on POs received to date. Allocation is a placeholder until provided.</p>
-    <div class="mvx-scroll">
-      <table class="mvx-spec">
-        <thead>
-          <tr><th>Item</th><th class="num">Oct</th><th class="num">Nov</th><th class="num">Dec</th><th class="num tot">Total 2026</th></tr>
-        </thead>
-        <tbody id="p-inv-body"></tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section class="mvx-band row-line">
-  <div class="mvx-container">
     <h2 class="mvx-seclabel">Pro Quote Type Mix</h2>
     <p class="mvx-secdesc" id="p-mix-desc"></p>
     <div class="mvx-donut-wrap">
@@ -1635,7 +1620,7 @@ var TARGETS = [];
     function cellv(v) { return '<td class="num">' + v + "</td>"; }
     function tbd() { return '<span class="mvx-tbd">TBD</span>'; }
     var A = PRO_ALLOC;
-    $("p-inv-body").innerHTML =
+    if ($("p-inv-body")) $("p-inv-body").innerHTML =
       '<tr><td class="key">Kits Allocated</td>' + cellv(A ? A.oct : tbd()) + cellv(A ? A.nov : tbd()) + cellv(A ? A.dec : tbd()) + '<td class="num tot">' + (A ? alloc : tbd()) + "</td></tr>" +
       '<tr><td class="key">Kits on POs Received</td>' + cellv(byM[9]) + cellv(byM[10]) + cellv(byM[11]) + '<td class="num tot">' + kits + "</td></tr>" +
       '<tr><td class="key">Kits Remaining</td>' + cellv(A ? A.oct - byM[9] : tbd()) + cellv(A ? A.nov - byM[10] : tbd()) + cellv(A ? A.dec - byM[11] : tbd()) +
