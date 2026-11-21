@@ -610,21 +610,6 @@ img, svg{max-width:100%}
 
 <section class="mvx-band row-line">
   <div class="mvx-container">
-    <h2 class="mvx-seclabel">Kit Inventory, Q4 2026</h2>
-    <p class="mvx-secdesc">Planned Narwhal kit allocation against kits on POs received to date.</p>
-    <div class="mvx-scroll">
-      <table class="mvx-spec">
-        <thead>
-          <tr><th>Item</th><th class="num">Oct</th><th class="num">Nov</th><th class="num">Dec</th><th class="num tot">Total 2026</th></tr>
-        </thead>
-        <tbody id="inv-tbody"></tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section class="mvx-band row-line">
-  <div class="mvx-container">
     <h2 class="mvx-seclabel">Quote Type Mix</h2>
     <p class="mvx-secdesc" id="mix-desc"></p>
     <div class="mvx-donut-wrap">
@@ -1081,6 +1066,7 @@ var TARGETS = [];
   }
 
   function renderInventory(kits, rows) {
+    if (!$("inv-tbody")) return;   // Kit Inventory section is hidden on the hosted site
     function cell(w, v, cls) { return '<span class="mvx-cellbar ' + cls + '" style="width:' + w.toFixed(1) + '%"></span><span class="mvx-celltext">' + v + "</span>"; }
     var a = ALLOC, byM = [0, 0, 0], remain = ALLOC_TOTAL - kits;
     (rows || []).forEach(function (r) {
